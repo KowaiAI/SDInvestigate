@@ -573,7 +573,12 @@ export class MemStorage implements IStorage {
 
   async createTool(insertTool: InsertTool): Promise<Tool> {
     const id = this.currentToolId++;
-    const tool: Tool = { ...insertTool, id };
+    const tool: Tool = { 
+      ...insertTool, 
+      id,
+      hasApi: insertTool.hasApi ?? false,
+      fullDescription: insertTool.fullDescription ?? null
+    };
     this.tools.set(id, tool);
     return tool;
   }
@@ -663,9 +668,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createTool(insertTool: InsertTool): Promise<Tool> {
+    const toolData = {
+      ...insertTool,
+      hasApi: insertTool.hasApi ?? false,
+      fullDescription: insertTool.fullDescription ?? null
+    };
+    
     const [tool] = await db
       .insert(tools)
-      .values(insertTool)
+      .values(toolData)
       .returning();
     return tool;
   }
