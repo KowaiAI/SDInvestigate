@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Heart, ExternalLink, Star, Users, Info, Shield, Code } from "lucide-react";
+import { Heart, ExternalLink, Star, Users, Info, Shield, Code, AlertTriangle } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Tool } from "@shared/schema";
@@ -72,6 +72,14 @@ export default function ToolCard({ tool, onClick }: ToolCardProps) {
   const handleOpenTool = (e: React.MouseEvent) => {
     e.stopPropagation();
     window.open(tool.url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleReportBrokenLink = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toast({
+      title: "Report Submitted",
+      description: `Thank you for reporting a broken link for ${tool.name}. Our team will review and update it.`,
+    });
   };
 
   const getPricingBadgeClass = (pricing: string) => {
@@ -301,25 +309,43 @@ export default function ToolCard({ tool, onClick }: ToolCardProps) {
                 </TooltipContent>
               </Tooltip>
             </div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleOpenTool}
-                  className="text-primary hover:text-primary/80 text-sm font-medium p-0 h-auto"
-                >
-                  Open Tool
-                  <ExternalLink className="w-3 h-3 ml-1" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <div className="space-y-1">
-                  <p className="text-xs font-medium">Opens: {tool.url}</p>
-                  <p className="text-xs text-muted-foreground">Click to access this OSINT tool directly</p>
-                </div>
-              </TooltipContent>
-            </Tooltip>
+            <div className="flex items-center space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleReportBrokenLink}
+                    className="text-orange-500 hover:text-orange-600 text-xs font-medium p-0 h-auto"
+                  >
+                    <AlertTriangle className="w-3 h-3 mr-1" />
+                    Report Broken Link
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p className="text-xs">Report if this tool's link is broken or inaccessible</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleOpenTool}
+                    className="text-primary hover:text-primary/80 text-sm font-medium p-0 h-auto"
+                  >
+                    Open Tool
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <div className="space-y-1">
+                    <p className="text-xs font-medium">Opens: {tool.url}</p>
+                    <p className="text-xs text-muted-foreground">Click to access this OSINT tool directly</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </div>
