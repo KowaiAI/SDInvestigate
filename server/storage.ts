@@ -1,4 +1,6 @@
 import { categories, tools, favorites, type Category, type Tool, type Favorite, type InsertCategory, type InsertTool, type InsertFavorite } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Categories
@@ -606,4 +608,91 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategoryBySlug(slug: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
+    return category || undefined;
+  }
+
+  async createCategory(insertCategory: InsertCategory): Promise<Category> {
+    const [category] = await db
+      .insert(categories)
+      .values(insertCategory)
+      .returning();
+    return category;
+  }
+
+  async getTools(filters?: { categoryId?: number; search?: string; pricing?: string; hasApi?: boolean }): Promise<Tool[]> {
+    let queryBuilder = db.select().from(tools);
+    
+    if (filters?.categoryId) {
+      queryBuilder = queryBuilder.where(eq(tools.categoryId, filters.categoryId));
+    }
+    
+    const allTools = await queryBuilder;
+    
+    if (!filters) return allTools;
+    
+    return allTools.filter(tool => {
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        const matches = tool.name.toLowerCase().includes(searchLower) ||
+                       tool.description.toLowerCase().includes(searchLower) ||
+                       (tool.tags as string[]).some(tag => tag.toLowerCase().includes(searchLower));
+        if (!matches) return false;
+      }
+      
+      if (filters.pricing && tool.pricing !== filters.pricing) return false;
+      if (filters.hasApi !== undefined && tool.hasApi !== filters.hasApi) return false;
+      
+      return true;
+    });
+  }
+
+  async getToolById(id: number): Promise<Tool | undefined> {
+    const [tool] = await db.select().from(tools).where(eq(tools.id, id));
+    return tool || undefined;
+  }
+
+  async getToolsByCategory(categoryId: number): Promise<Tool[]> {
+    return await db.select().from(tools).where(eq(tools.categoryId, categoryId));
+  }
+
+  async createTool(insertTool: InsertTool): Promise<Tool> {
+    const [tool] = await db
+      .insert(tools)
+      .values(insertTool)
+      .returning();
+    return tool;
+  }
+
+  async getFavorites(userId: string): Promise<number[]> {
+    const userFavorites = await db.select().from(favorites).where(eq(favorites.userId, userId));
+    return userFavorites.map(f => f.toolId);
+  }
+
+  async addFavorite(insertFavorite: InsertFavorite): Promise<Favorite> {
+    const [favorite] = await db
+      .insert(favorites)
+      .values(insertFavorite)
+      .returning();
+    return favorite;
+  }
+
+  async removeFavorite(toolId: number, userId: string): Promise<void> {
+    await db.delete(favorites)
+      .where(eq(favorites.toolId, toolId) && eq(favorites.userId, userId));
+  }
+
+  async isFavorite(toolId: number, userId: string): Promise<boolean> {
+    const [favorite] = await db.select().from(favorites)
+      .where(eq(favorites.toolId, toolId) && eq(favorites.userId, userId));
+    return !!favorite;
+  }
+}
+
+export const storage = new DatabaseStorage();
