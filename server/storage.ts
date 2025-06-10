@@ -129,6 +129,18 @@ export class MemStorage implements IStorage {
   }
 
   private initializeOsintTools() {
+    // Get category IDs by slug for proper mapping
+    const socialMediaCategory = Array.from(this.categories.values()).find(c => c.slug === 'social-media');
+    const networkCategory = Array.from(this.categories.values()).find(c => c.slug === 'network');
+    const geospatialCategory = Array.from(this.categories.values()).find(c => c.slug === 'geospatial');
+    const searchCategory = Array.from(this.categories.values()).find(c => c.slug === 'search');
+    const imagesCategory = Array.from(this.categories.values()).find(c => c.slug === 'images');
+    const emailCategory = Array.from(this.categories.values()).find(c => c.slug === 'email');
+    const phoneCategory = Array.from(this.categories.values()).find(c => c.slug === 'phone');
+    const documentsCategory = Array.from(this.categories.values()).find(c => c.slug === 'documents');
+    const financialCategory = Array.from(this.categories.values()).find(c => c.slug === 'financial');
+    const threatCategory = Array.from(this.categories.values()).find(c => c.slug === 'threat');
+
     const osintTools: InsertTool[] = [
       // Social Media Intelligence Tools
       {
@@ -136,7 +148,7 @@ export class MemStorage implements IStorage {
         description: "Advanced Twitter monitoring and analytics tool for tracking conversations, hashtags, and user activity across multiple accounts.",
         fullDescription: "TweetDeck is Twitter's official professional social media dashboard for managing multiple Twitter accounts. It provides real-time tracking, advanced filtering, and scheduling capabilities that make it an essential tool for OSINT investigators working with Twitter data.",
         url: "https://tweetdeck.twitter.com",
-        categoryId: 1,
+        categoryId: socialMediaCategory?.id || 1,
         pricing: "free",
         platform: "web",
         rating: 48,
@@ -158,7 +170,7 @@ export class MemStorage implements IStorage {
         description: "Real-time social media search engine for monitoring mentions, hashtags, and content across Facebook, Twitter, Instagram, and more.",
         fullDescription: "Social Searcher is a comprehensive social media monitoring tool that provides real-time search capabilities across multiple platforms. It's designed for OSINT investigators who need to track mentions, monitor brand reputation, and gather intelligence from social media sources.",
         url: "https://www.social-searcher.com",
-        categoryId: 1,
+        categoryId: socialMediaCategory?.id || 1,
         pricing: "freemium",
         platform: "web",
         rating: 46,
@@ -180,7 +192,7 @@ export class MemStorage implements IStorage {
         description: "Professional people search engine for finding comprehensive background information, social profiles, and contact details.",
         fullDescription: "Pipl is a professional-grade people search engine that aggregates data from hundreds of sources to provide comprehensive background information. It's widely used by investigators, recruiters, and security professionals for person-of-interest research.",
         url: "https://pipl.com",
-        categoryId: 1,
+        categoryId: socialMediaCategory?.id || 1,
         pricing: "premium",
         platform: "web",
         rating: 45,
@@ -204,7 +216,7 @@ export class MemStorage implements IStorage {
         description: "Search engine for Internet-connected devices, providing insights into exposed services, vulnerabilities, and network infrastructure.",
         fullDescription: "Shodan is the world's first search engine for Internet-connected devices. It allows cybersecurity professionals and researchers to discover devices exposed to the internet, including webcams, servers, and IoT devices.",
         url: "https://www.shodan.io",
-        categoryId: 2,
+        categoryId: networkCategory?.id || 2,
         pricing: "freemium",
         platform: "web",
         rating: 47,
@@ -226,7 +238,7 @@ export class MemStorage implements IStorage {
         description: "Internet scanning and attack surface management platform for discovering and monitoring internet-facing assets.",
         fullDescription: "Censys provides comprehensive internet scanning capabilities, helping security teams discover and monitor their internet-facing assets. It offers detailed information about services, certificates, and vulnerabilities across the entire IPv4 space.",
         url: "https://censys.io",
-        categoryId: 2,
+        categoryId: networkCategory?.id || 2,
         pricing: "freemium",
         platform: "web",
         rating: 46,
@@ -250,7 +262,7 @@ export class MemStorage implements IStorage {
         description: "Advanced Google search techniques using specific operators to find sensitive information and hidden content.",
         fullDescription: "Google Dorking involves using advanced search operators to find information that might not be easily accessible through normal searches. These techniques are essential for OSINT investigators to uncover hidden files, sensitive information, and specific content types.",
         url: "https://www.google.com",
-        categoryId: 4,
+        categoryId: searchCategory?.id || 4,
         pricing: "free",
         platform: "web",
         rating: 50,
@@ -272,7 +284,7 @@ export class MemStorage implements IStorage {
         description: "Privacy-focused search engine that doesn't track users, useful for anonymous OSINT research.",
         fullDescription: "DuckDuckGo is a privacy-focused search engine that doesn't track users or store personal information. This makes it valuable for OSINT investigators who need to conduct research without leaving digital footprints or having results influenced by previous searches.",
         url: "https://duckduckgo.com",
-        categoryId: 4,
+        categoryId: searchCategory?.id || 4,
         pricing: "free",
         platform: "web",
         rating: 44,
@@ -296,7 +308,7 @@ export class MemStorage implements IStorage {
         description: "Reverse image search engine for finding where images appear online and detecting image manipulation.",
         fullDescription: "TinEye is a reverse image search engine that helps you find where an image came from, how it's being used, if modified versions exist, or if there's a higher resolution version available. It's essential for verifying image authenticity in investigations.",
         url: "https://tineye.com",
-        categoryId: 5,
+        categoryId: imagesCategory?.id || 5,
         pricing: "freemium",
         platform: "web",
         rating: 46,
