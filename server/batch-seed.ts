@@ -18,7 +18,7 @@ interface OSINTFramework {
 async function batchSeedOSINT(): Promise<void> {
   console.log("Starting optimized OSINT Framework batch seeding...");
   
-  const filePath = './attached_assets/arf_1749517805674.json';
+  const filePath = '../attached_assets/arf_1749517805674.json';
   const fileContent = readFileSync(filePath, 'utf-8');
   const osintData: OSINTFramework = JSON.parse(fileContent);
 
