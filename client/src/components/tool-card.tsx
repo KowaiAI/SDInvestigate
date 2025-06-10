@@ -316,10 +316,9 @@ export default function ToolCard({ tool, onClick }: ToolCardProps) {
                     variant="ghost"
                     size="sm"
                     onClick={handleReportBrokenLink}
-                    className="text-orange-500 hover:text-orange-600 text-xs font-medium p-0 h-auto"
+                    className="text-orange-500 hover:text-orange-600 p-1 h-auto"
                   >
-                    <AlertTriangle className="w-3 h-3 mr-1" />
-                    Report Broken Link
+                    <AlertTriangle className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
