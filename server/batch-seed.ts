@@ -15,10 +15,9 @@ interface OSINTFramework {
   children: OSINTNode[];
 }
 
-async function seedOSINTFramework(): Promise<void> {
-  console.log("Starting OSINT Framework seeding...");
+async function batchSeedOSINT(): Promise<void> {
+  console.log("Starting optimized OSINT Framework batch seeding...");
   
-  // Read the JSON file
   const filePath = './attached_assets/arf_1749517805674.json';
   const fileContent = readFileSync(filePath, 'utf-8');
   const osintData: OSINTFramework = JSON.parse(fileContent);
@@ -28,9 +27,12 @@ async function seedOSINTFramework(): Promise<void> {
   await db.delete(categories);
   console.log("Cleared existing data");
 
+  // Prepare category data
+  const categoryData: any[] = [];
   const categoryMap = new Map<string, number>();
-  
-  // Category mapping - expanding to cover all OSINT Framework categories
+  let categoryId = 1;
+
+  // Category mapping for comprehensive coverage
   const categoryMapping: Record<string, string> = {
     'Username': 'Username Investigation',
     'Email Address': 'Email Investigation', 
@@ -72,205 +74,162 @@ async function seedOSINTFramework(): Promise<void> {
     'Weapons': 'Weapons Intelligence'
   };
 
-  // Create categories
+  // Prepare categories
   for (const mainCategory of osintData.children) {
     const mappedName = categoryMapping[mainCategory.name] || mainCategory.name;
     
     if (!categoryMap.has(mappedName)) {
-      const [category] = await db.insert(categories).values({
+      const categoryRecord = {
         name: mappedName,
         description: `OSINT tools for ${mappedName.toLowerCase()} investigations`,
-        slug: mappedName.toLowerCase().replace(/\s+/g, '-'),
+        slug: mappedName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
         icon: getCategoryIcon(mappedName),
         color: getCategoryColor(mappedName)
-      }).returning();
+      };
       
-      categoryMap.set(mappedName, category.id);
+      categoryData.push(categoryRecord);
+      categoryMap.set(mappedName, categoryId);
+      categoryId++;
     }
   }
 
-  console.log(`Created ${categoryMap.size} categories`);
+  // Insert categories in batch
+  const insertedCategories = await db.insert(categories).values(categoryData).returning();
+  console.log(`Created ${insertedCategories.length} categories`);
 
-  // Parse and create tools
-  let toolCount = 0;
+  // Update category map with actual IDs
+  categoryMap.clear();
+  insertedCategories.forEach(cat => {
+    categoryMap.set(cat.name, cat.id);
+  });
+
+  // Prepare tools data
+  const toolsData: any[] = [];
+  let toolId = 1;
+
   for (const mainCategory of osintData.children) {
     const mappedName = categoryMapping[mainCategory.name] || mainCategory.name;
-    const categoryId = categoryMap.get(mappedName)!;
+    const categoryDbId = categoryMap.get(mappedName)!;
     
-    toolCount += await parseCategory(mainCategory, categoryId);
+    await collectTools(mainCategory, categoryDbId, toolsData);
   }
 
-  console.log(`Successfully seeded ${categoryMap.size} categories and ${toolCount} tools`);
+  // Insert tools in batches of 100
+  const batchSize = 100;
+  let totalInserted = 0;
+  
+  for (let i = 0; i < toolsData.length; i += batchSize) {
+    const batch = toolsData.slice(i, i + batchSize);
+    await db.insert(tools).values(batch);
+    totalInserted += batch.length;
+    
+    if (totalInserted % 500 === 0) {
+      console.log(`Inserted ${totalInserted} tools...`);
+    }
+  }
+
+  console.log(`Successfully seeded ${insertedCategories.length} categories and ${totalInserted} tools`);
 }
 
-async function parseCategory(category: OSINTNode, categoryId: number): Promise<number> {
-  let toolCount = 0;
-  
+async function collectTools(category: OSINTNode, categoryId: number, toolsData: any[], subcategory?: string): Promise<void> {
   if (category.children) {
-    for (const subcategory of category.children) {
-      if (subcategory.type === 'folder' && subcategory.children) {
-        // Process tools in subcategory
-        for (const tool of subcategory.children) {
-          if (tool.type === 'url' && tool.url) {
-            await createTool(tool, categoryId, subcategory.name);
-            toolCount++;
-          }
+    for (const item of category.children) {
+      if (item.type === 'folder' && item.children) {
+        // Recursively process subcategories
+        await collectTools(item, categoryId, toolsData, item.name);
+      } else if (item.type === 'url' && item.url) {
+        // Add tool to batch
+        const toolData = createToolData(item, categoryId, subcategory);
+        if (toolData) {
+          toolsData.push(toolData);
         }
-      } else if (subcategory.type === 'url' && subcategory.url) {
-        // Direct tool in main category
-        await createTool(subcategory, categoryId);
-        toolCount++;
       }
     }
   }
-  
-  return toolCount;
 }
 
-async function createTool(tool: OSINTNode, categoryId: number, subcategory?: string): Promise<void> {
-  if (!tool.url) return;
+function createToolData(tool: OSINTNode, categoryId: number, subcategory?: string): any | null {
+  if (!tool.url) return null;
 
-  // Extract tool type from name
-  const toolType = extractToolType(tool.name);
   const isGithubTool = tool.url.includes('github.com');
   const isRequiredRegistration = tool.name.includes('(R)');
   const isManualSearch = tool.name.includes('(M)');
   const isDorkingTool = tool.name.includes('(D)');
 
-  // Generate description
   let description = `OSINT tool for ${subcategory ? subcategory.toLowerCase() : 'investigation'}`;
-  if (isGithubTool) description += ' (Open source tool)';
+  if (isGithubTool) description += ' (Open source)';
   if (isRequiredRegistration) description += ' (Registration required)';
-  if (isManualSearch) description += ' (Manual search required)';
+  if (isManualSearch) description += ' (Manual search)';
   if (isDorkingTool) description += ' (Dorking technique)';
 
-  // Clean tool name
   const cleanName = tool.name
     .replace(/\s*\([RTMD]\)/, '')
     .replace(/\s*\(T\)/, '')
     .trim();
 
-  const toolData = {
+  return {
     name: cleanName,
     description,
-    fullDescription: generateFullDescription(cleanName, subcategory, toolType),
+    fullDescription: `${cleanName} is a professional OSINT tool${subcategory ? ` for ${subcategory.toLowerCase()}` : ''}. Part of the comprehensive OSINT Framework used by security researchers and investigators worldwide.`,
     url: tool.url,
     categoryId,
-    pricing: isRequiredRegistration ? 'Freemium' : isGithubTool ? 'Free' : 'Free',
+    pricing: isRequiredRegistration ? 'Freemium' : 'Free',
     platform: detectPlatform(tool.url),
-    rating: Math.floor(generateRating(tool.name, isGithubTool) * 10),
-    userCount: generateUserCount(tool.name, isGithubTool),
-    features: generateFeatures(subcategory, toolType, isGithubTool),
+    rating: Math.floor((isGithubTool ? 42 : 40) + (simpleHash(tool.name) % 8)),
+    userCount: (isGithubTool ? 50000 : 25000) + (simpleHash(tool.name) % 100000),
+    features: generateFeatures(subcategory, isGithubTool),
     useCases: [],
-    tags: generateTags(subcategory, toolType, tool.name),
-    isOfficial: getVerificationStatus(tool.name) === 'verified',
+    tags: generateTags(subcategory, tool.name),
+    isOfficial: isWellKnownTool(tool.name),
     hasApi: detectApiSupport(tool.name, tool.url),
     iconType: 'lucide',
-    iconName: getToolIcon(toolType, subcategory),
-    iconColor: getToolIconColor(toolType)
+    iconName: getToolIcon(subcategory),
+    iconColor: getToolIconColor(subcategory)
   };
-
-  await db.insert(tools).values(toolData);
-}
-
-function extractToolType(name: string): string {
-  const lowerName = name.toLowerCase();
-  if (lowerName.includes('search')) return 'search';
-  if (lowerName.includes('scan') || lowerName.includes('scanner')) return 'scanner';
-  if (lowerName.includes('api')) return 'api';
-  if (lowerName.includes('tool')) return 'tool';
-  if (lowerName.includes('check') || lowerName.includes('verify')) return 'verification';
-  if (lowerName.includes('track') || lowerName.includes('monitor')) return 'monitoring';
-  if (lowerName.includes('analyze') || lowerName.includes('analysis')) return 'analysis';
-  return 'utility';
-}
-
-function generateFullDescription(name: string, subcategory?: string, toolType?: string): string {
-  let desc = `${name} is a professional OSINT tool`;
-  if (subcategory) desc += ` designed for ${subcategory.toLowerCase()}`;
-  if (toolType) desc += ` providing ${toolType} capabilities`;
-  desc += '. This tool is part of the comprehensive OSINT Framework and is widely used by security researchers, investigators, and intelligence analysts for conducting thorough open source intelligence investigations.';
-  return desc;
 }
 
 function detectPlatform(url: string): string {
   if (url.includes('github.com')) return 'GitHub';
   if (url.includes('google.com')) return 'Google';
-  const domain = new URL(url).hostname.replace('www.', '');
-  return domain.split('.')[0].charAt(0).toUpperCase() + domain.split('.')[0].slice(1);
-}
-
-function generateRating(name: string, isGithub: boolean): number {
-  const baseRating = isGithub ? 4.2 : 4.0;
-  const hash = simpleHash(name);
-  const variation = ((hash % 10) - 5) * 0.1;
-  return Math.max(3.5, Math.min(5.0, baseRating + variation));
-}
-
-function generateUserCount(name: string, isGithub: boolean): number {
-  const hash = simpleHash(name);
-  const baseCount = isGithub ? 50000 : 25000;
-  const variation = (hash % 100000);
-  return baseCount + variation;
-}
-
-function generateFeatures(subcategory?: string, toolType?: string, isGithub?: boolean): string[] {
-  const features = ['OSINT Investigation'];
-  
-  if (subcategory) {
-    features.push(subcategory);
+  try {
+    const domain = new URL(url).hostname.replace('www.', '');
+    return domain.split('.')[0].charAt(0).toUpperCase() + domain.split('.')[0].slice(1);
+  } catch {
+    return 'Web';
   }
-  
-  if (toolType === 'search') features.push('Advanced Search');
-  if (toolType === 'scanner') features.push('Security Scanning');
-  if (toolType === 'api') features.push('API Access');
-  if (toolType === 'monitoring') features.push('Real-time Monitoring');
-  if (toolType === 'analysis') features.push('Data Analysis');
-  
+}
+
+function generateFeatures(subcategory?: string, isGithub?: boolean): string[] {
+  const features = ['OSINT Investigation'];
+  if (subcategory) features.push(subcategory);
   if (isGithub) {
     features.push('Open Source', 'Command Line');
   } else {
     features.push('Web Interface');
   }
-  
   return features;
 }
 
-function generateTags(subcategory?: string, toolType?: string, name?: string): string[] {
+function generateTags(subcategory?: string, name?: string): string[] {
   const tags = ['OSINT'];
-  
-  if (subcategory) tags.push(subcategory.toLowerCase());
-  if (toolType) tags.push(toolType);
+  if (subcategory) tags.push(subcategory.toLowerCase().replace(/\s+/g, '-'));
   if (name?.toLowerCase().includes('email')) tags.push('email');
   if (name?.toLowerCase().includes('domain')) tags.push('domain');
   if (name?.toLowerCase().includes('social')) tags.push('social-media');
-  if (name?.toLowerCase().includes('search')) tags.push('search');
-  
   return tags;
 }
 
 function detectApiSupport(name: string, url: string): boolean {
   const lowerName = name.toLowerCase();
   return lowerName.includes('api') || 
-         lowerName.includes('github') ||
          url.includes('api.') ||
-         lowerName.includes('hunter') ||
-         lowerName.includes('shodan');
+         ['shodan', 'hunter', 'censys'].some(tool => lowerName.includes(tool));
 }
 
-function getVerificationStatus(name: string): 'verified' | 'community' | 'experimental' {
+function isWellKnownTool(name: string): boolean {
   const wellKnownTools = ['shodan', 'hunter', 'github', 'google', 'censys', 'whois'];
   const lowerName = name.toLowerCase();
-  
-  if (wellKnownTools.some(tool => lowerName.includes(tool))) {
-    return 'verified';
-  }
-  
-  if (name.includes('(T)') || name.includes('github')) {
-    return 'community';
-  }
-  
-  return 'experimental';
+  return wellKnownTools.some(tool => lowerName.includes(tool));
 }
 
 function getCategoryIcon(categoryName: string): string {
@@ -290,15 +249,20 @@ function getCategoryIcon(categoryName: string): string {
     'Government Records': 'landmark',
     'Real Estate Intelligence': 'home',
     'Communications Intelligence': 'message-circle',
-    'Threat Intelligence': 'shield',
-    'Image Intelligence': 'eye',
-    'Academic Research': 'graduation-cap',
-    'Code Analysis': 'code',
-    'Temporal Analysis': 'clock',
-    'Document Analysis': 'file-text',
-    'Encrypted Communications': 'lock',
-    'Language Analysis': 'languages',
-    'Wireless Intelligence': 'wifi'
+    'People Search': 'user-check',
+    'Dating Intelligence': 'heart',
+    'Forum Intelligence': 'message-square',
+    'Archive Intelligence': 'archive',
+    'Paste Intelligence': 'clipboard',
+    'Gaming Intelligence': 'gamepad-2',
+    'Cryptocurrency Analysis': 'coins',
+    'Geolocation Intelligence': 'map-pin',
+    'Browser Extensions': 'puzzle',
+    'Digital Networks': 'wifi',
+    'World Records': 'globe-2',
+    'Criminal Intelligence': 'shield-alert',
+    'Extremist Intelligence': 'alert-triangle',
+    'Weapons Intelligence': 'shield-x'
   };
   return iconMap[categoryName] || 'tool';
 }
@@ -320,42 +284,48 @@ function getCategoryColor(categoryName: string): string {
     'Government Records': '#dc2626',
     'Real Estate Intelligence': '#7c3aed',
     'Communications Intelligence': '#0ea5e9',
-    'Threat Intelligence': '#991b1b',
-    'Image Intelligence': '#7c2d12',
-    'Academic Research': '#166534',
-    'Code Analysis': '#1e40af',
-    'Temporal Analysis': '#92400e',
-    'Document Analysis': '#374151',
-    'Encrypted Communications': '#7f1d1d',
-    'Language Analysis': '#581c87',
-    'Wireless Intelligence': '#075985'
+    'People Search': '#16a34a',
+    'Dating Intelligence': '#e11d48',
+    'Forum Intelligence': '#7c3aed',
+    'Archive Intelligence': '#0891b2',
+    'Paste Intelligence': '#ca8a04',
+    'Gaming Intelligence': '#7c2d12',
+    'Cryptocurrency Analysis': '#ea580c',
+    'Geolocation Intelligence': '#15803d',
+    'Browser Extensions': '#9333ea',
+    'Digital Networks': '#0284c7',
+    'World Records': '#166534',
+    'Criminal Intelligence': '#991b1b',
+    'Extremist Intelligence': '#be123c',
+    'Weapons Intelligence': '#7f1d1d'
   };
   return colorMap[categoryName] || '#6b7280';
 }
 
-function getToolIcon(toolType?: string, subcategory?: string): string {
-  if (toolType === 'search') return 'search';
-  if (toolType === 'scanner') return 'scan-line';
-  if (toolType === 'api') return 'code';
-  if (toolType === 'monitoring') return 'activity';
-  if (toolType === 'analysis') return 'bar-chart';
+function getToolIcon(subcategory?: string): string {
   if (subcategory?.toLowerCase().includes('email')) return 'mail';
   if (subcategory?.toLowerCase().includes('domain')) return 'globe';
   if (subcategory?.toLowerCase().includes('social')) return 'users';
+  if (subcategory?.toLowerCase().includes('search')) return 'search';
+  if (subcategory?.toLowerCase().includes('phone')) return 'phone';
+  if (subcategory?.toLowerCase().includes('image')) return 'image';
+  if (subcategory?.toLowerCase().includes('video')) return 'video';
   return 'tool';
 }
 
-function getToolIconColor(toolType?: string): string {
+function getToolIconColor(subcategory?: string): string {
   const colorMap: Record<string, string> = {
+    'email': '#ef4444',
+    'domain': '#10b981',
+    'social': '#06b6d4',
     'search': '#3b82f6',
-    'scanner': '#ef4444',
-    'api': '#10b981',
-    'monitoring': '#f59e0b',
-    'analysis': '#8b5cf6',
-    'verification': '#06b6d4',
-    'utility': '#6b7280'
+    'phone': '#8b5cf6',
+    'image': '#f97316',
+    'video': '#ec4899'
   };
-  return colorMap[toolType || 'utility'] || '#6b7280';
+  
+  const key = Object.keys(colorMap).find(k => subcategory?.toLowerCase().includes(k));
+  return key ? colorMap[key] : '#6b7280';
 }
 
 function simpleHash(str: string): number {
@@ -368,4 +338,4 @@ function simpleHash(str: string): number {
   return Math.abs(hash);
 }
 
-seedOSINTFramework().catch(console.error);
+batchSeedOSINT().catch(console.error);
