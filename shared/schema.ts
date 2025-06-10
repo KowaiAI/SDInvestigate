@@ -22,9 +22,11 @@ export const tools = pgTable("tools", {
   platform: text("platform").notNull(), // 'web', 'desktop', 'mobile', 'cli', 'api'
   rating: integer("rating").notNull().default(40), // 1-5 scale * 10 for decimals
   userCount: integer("user_count").notNull().default(0),
-  features: jsonb("features").$type<string[]>().notNull().default([]),
+  features: text("features").array().notNull().default([]),
   useCases: jsonb("use_cases").$type<{title: string, description: string, color: string}[]>().notNull().default([]),
-  tags: jsonb("tags").$type<string[]>().notNull().default([]),
+  tags: text("tags").array().notNull().default([]),
+  isVerified: boolean("is_verified").notNull().default(true),
+  lastUpdated: text("last_updated").notNull().default(""),
   isOfficial: boolean("is_official").notNull().default(false),
   hasApi: boolean("has_api").notNull().default(false),
   iconType: text("icon_type").notNull(), // 'fab', 'fas', 'far'

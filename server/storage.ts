@@ -577,7 +577,15 @@ export class MemStorage implements IStorage {
       ...insertTool, 
       id,
       hasApi: insertTool.hasApi ?? false,
-      fullDescription: insertTool.fullDescription ?? null
+      fullDescription: insertTool.fullDescription ?? null,
+      rating: insertTool.rating ?? 40,
+      userCount: insertTool.userCount ?? 0,
+      features: Array.isArray(insertTool.features) ? insertTool.features : [],
+      lastUpdated: insertTool.lastUpdated ?? new Date().toISOString(),
+      tags: Array.isArray(insertTool.tags) ? insertTool.tags : [],
+      isVerified: insertTool.isVerified ?? true,
+      isOfficial: insertTool.isOfficial ?? false,
+      useCases: Array.isArray(insertTool.useCases) ? insertTool.useCases : []
     };
     this.tools.set(id, tool);
     return tool;
@@ -671,7 +679,14 @@ export class DatabaseStorage implements IStorage {
     const toolData = {
       ...insertTool,
       hasApi: insertTool.hasApi ?? false,
-      fullDescription: insertTool.fullDescription ?? null
+      fullDescription: insertTool.fullDescription ?? null,
+      rating: insertTool.rating ?? 4.0,
+      userCount: insertTool.userCount ?? 0,
+      features: insertTool.features ?? [],
+      lastUpdated: insertTool.lastUpdated ?? new Date().toISOString(),
+      tags: insertTool.tags ?? [],
+      isVerified: insertTool.isVerified ?? true,
+      isOfficial: insertTool.isOfficial ?? false
     };
     
     const [tool] = await db
