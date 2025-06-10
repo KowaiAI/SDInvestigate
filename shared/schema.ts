@@ -20,7 +20,7 @@ export const tools = pgTable("tools", {
   categoryId: integer("category_id").notNull(),
   pricing: text("pricing").notNull(), // 'free', 'freemium', 'premium'
   platform: text("platform").notNull(), // 'web', 'desktop', 'mobile', 'cli', 'api'
-  rating: integer("rating").notNull().default(0), // 1-5 scale * 10 for decimals
+  rating: integer("rating").notNull().default(40), // 1-5 scale * 10 for decimals
   userCount: integer("user_count").notNull().default(0),
   features: jsonb("features").$type<string[]>().notNull().default([]),
   useCases: jsonb("use_cases").$type<{title: string, description: string, color: string}[]>().notNull().default([]),
