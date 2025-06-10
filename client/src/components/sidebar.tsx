@@ -61,54 +61,6 @@ export default function Sidebar({
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="p-6 border-b border-slate-200">
-          <h3 className="text-sm font-semibold text-slate-900 mb-4">Filter by Type</h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="free-tools"
-                  checked={filters.isFree}
-                  onCheckedChange={(checked) => handleFilterChange('isFree', checked as boolean)}
-                />
-                <label htmlFor="free-tools" className="text-sm text-slate-700 cursor-pointer">
-                  Free Tools
-                </label>
-              </div>
-              <span className="text-xs text-slate-500">(892)</span>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="premium-tools"
-                  checked={filters.isPremium}
-                  onCheckedChange={(checked) => handleFilterChange('isPremium', checked as boolean)}
-                />
-                <label htmlFor="premium-tools" className="text-sm text-slate-700 cursor-pointer">
-                  Premium Tools
-                </label>
-              </div>
-              <span className="text-xs text-slate-500">(355)</span>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="api-tools"
-                  checked={filters.hasApi}
-                  onCheckedChange={(checked) => handleFilterChange('hasApi', checked as boolean)}
-                />
-                <label htmlFor="api-tools" className="text-sm text-slate-700 cursor-pointer">
-                  API Available
-                </label>
-              </div>
-              <span className="text-xs text-slate-500">(203)</span>
-            </div>
-          </div>
-        </div>
-
         {/* Categories */}
         <div className="p-6">
           <h3 className="text-sm font-semibold text-slate-900 mb-4">Categories</h3>
