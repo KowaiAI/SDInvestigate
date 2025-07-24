@@ -23,6 +23,20 @@ interface HelpBubbleProps {
   onSkip: () => void;
 }
 
+/**
+ * Renders a help bubble component that guides users through a series of steps.
+ *
+ * This function manages the visibility and positioning of the help bubble based on the current step data.
+ * It also handles navigation between steps, skips, and completion events. The bubble's position is calculated
+ * relative to the target element specified in the current step data. The component includes an overlay,
+ * a highlight ring around the target, and buttons for navigation.
+ *
+ * @param steps - An array of step objects containing details about each help step.
+ * @param currentStep - The ID of the currently active step.
+ * @param onStepChange - A callback function to change the current step.
+ * @param onComplete - A callback function to handle completion of all steps.
+ * @param onSkip - A callback function to skip the help bubble.
+ */
 export function HelpBubble({
   steps,
   currentStep,
@@ -57,6 +71,14 @@ export function HelpBubble({
 
   if (!currentStepData || !targetRect || !isVisible) return null;
 
+  /**
+   * Determines the position of a bubble relative to a target rectangle within the viewport.
+   *
+   * This function calculates the top and left coordinates based on the current step data's position attribute.
+   * It ensures that the bubble stays within the viewport boundaries by adjusting the calculated positions accordingly.
+   *
+   * @returns An object containing the `top` and `left` coordinates for positioning the bubble.
+   */
   const getBubblePosition = () => {
     const bubbleWidth = 320;
     const bubbleHeight = 200;
