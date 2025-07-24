@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import ToolCard from "@/components/tool-card";
 import ExportModal from "@/components/export-modal";
 import ToolDetailModal from "@/components/tool-detail-modal";
+import { HelpBubble, useHelpBubble } from "@/components/help-bubble";
+import { OnboardingTrigger, HelpButton } from "@/components/onboarding-trigger";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Category, Tool } from "@shared/schema";
+import { onboardingSteps } from "@/lib/onboarding-steps";
+import { apiRequest } from "@/lib/queryClient";
+import type { Category, Tool, UserOnboarding } from "@shared/schema";
 
 interface HomeProps {
   params?: { slug?: string };
@@ -18,6 +22,7 @@ interface HomeProps {
 export default function Home({ params }: HomeProps) {
   const [location] = useLocation();
   const categorySlug = params?.slug || 'social-media';
+  const queryClient = useQueryClient();
   
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({
@@ -31,6 +36,16 @@ export default function Home({ params }: HomeProps) {
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const toolsPerPage = 6;
+
+  // Help bubble state
+  const {
+    currentStep,
+    isOnboarding,
+    startOnboarding,
+    nextStep,
+    skipOnboarding,
+    completeOnboarding,
+  } = useHelpBubble();
 
   // Fetch categories
   const { data: categories = [] } = useQuery<Category[]>({
@@ -70,6 +85,52 @@ export default function Home({ params }: HomeProps) {
   const { data: allTools = [], isLoading } = useQuery<Tool[]>({
     queryKey: ["/api/tools", buildFilters()],
   });
+
+  // Fetch user onboarding status
+  const { data: onboardingData } = useQuery<UserOnboarding>({
+    queryKey: ["/api/onboarding"],
+  });
+
+  // Update onboarding step mutation
+  const updateOnboardingMutation = useMutation({
+    mutationFn: (step: string) => apiRequest(`/api/onboarding/${step}`, 'POST'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/onboarding"] });
+    },
+  });
+
+  // Check if user should see onboarding
+  useEffect(() => {
+    if (onboardingData && !onboardingData.completedOnboarding && !isOnboarding) {
+      // Auto-start onboarding for new users after a short delay
+      const timer = setTimeout(() => {
+        startOnboarding('welcome');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [onboardingData, isOnboarding, startOnboarding]);
+
+  // Handle onboarding step changes
+  const handleStepChange = (stepId: string | null) => {
+    if (stepId) {
+      updateOnboardingMutation.mutate(stepId);
+    }
+    nextStep(stepId);
+  };
+
+  const handleOnboardingComplete = () => {
+    updateOnboardingMutation.mutate('complete');
+    completeOnboarding();
+  };
+
+  const handleSkipOnboarding = () => {
+    updateOnboardingMutation.mutate('complete');
+    skipOnboarding();
+  };
+
+  const handleStartTour = () => {
+    startOnboarding('welcome');
+  };
 
   // Sort and paginate tools
   const sortedTools = [...allTools].sort((a, b) => {
@@ -145,6 +206,21 @@ export default function Home({ params }: HomeProps) {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Help system components */}
+      <HelpBubble
+        steps={onboardingSteps}
+        currentStep={currentStep}
+        onStepChange={handleStepChange}
+        onComplete={handleOnboardingComplete}
+        onSkip={handleSkipOnboarding}
+      />
+      
+      <OnboardingTrigger
+        onStartOnboarding={handleStartTour}
+        isVisible={!onboardingData?.completedOnboarding && !isOnboarding}
+      />
+      
+      <HelpButton onStartOnboarding={handleStartTour} data-onboarding="help-button" />
       <Header toolCount={totalToolsCount} onExport={handleExport} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -192,11 +268,12 @@ export default function Home({ params }: HomeProps) {
             {/* Tools Grid */}
             {currentTools.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {currentTools.map((tool) => (
+                {currentTools.map((tool, index) => (
                   <ToolCard
                     key={tool.id}
                     tool={tool}
                     onClick={() => handleToolClick(tool)}
+                    data-onboarding={index === 0 ? "tool-card" : undefined}
                   />
                 ))}
               </div>

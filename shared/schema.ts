@@ -40,6 +40,18 @@ export const favorites = pgTable("favorites", {
   userId: text("user_id").notNull(), // For now, using session-based IDs
 });
 
+export const userOnboarding = pgTable("user_onboarding", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().unique(),
+  hasSeenWelcome: boolean("has_seen_welcome").notNull().default(false),
+  hasSeenCategoryFilter: boolean("has_seen_category_filter").notNull().default(false),
+  hasSeenSearch: boolean("has_seen_search").notNull().default(false),
+  hasSeenToolCard: boolean("has_seen_tool_card").notNull().default(false),
+  hasSeenExport: boolean("has_seen_export").notNull().default(false),
+  hasSeenReport: boolean("has_seen_report").notNull().default(false),
+  completedOnboarding: boolean("completed_onboarding").notNull().default(false),
+});
+
 export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true,
 });
@@ -52,9 +64,15 @@ export const insertFavoriteSchema = createInsertSchema(favorites).omit({
   id: true,
 });
 
+export const insertUserOnboardingSchema = createInsertSchema(userOnboarding).omit({
+  id: true,
+});
+
 export type Category = typeof categories.$inferSelect;
 export type Tool = typeof tools.$inferSelect;
 export type Favorite = typeof favorites.$inferSelect;
+export type UserOnboarding = typeof userOnboarding.$inferSelect;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type InsertTool = z.infer<typeof insertToolSchema>;
 export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
+export type InsertUserOnboarding = z.infer<typeof insertUserOnboardingSchema>;

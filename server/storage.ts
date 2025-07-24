@@ -1,4 +1,4 @@
-import { categories, tools, favorites, type Category, type Tool, type Favorite, type InsertCategory, type InsertTool, type InsertFavorite } from "@shared/schema";
+import { categories, tools, favorites, userOnboarding, type Category, type Tool, type Favorite, type UserOnboarding, type InsertCategory, type InsertTool, type InsertFavorite, type InsertUserOnboarding } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -19,23 +19,32 @@ export interface IStorage {
   addFavorite(favorite: InsertFavorite): Promise<Favorite>;
   removeFavorite(toolId: number, userId: string): Promise<void>;
   isFavorite(toolId: number, userId: string): Promise<boolean>;
+
+  // User Onboarding
+  getUserOnboarding(userId: string): Promise<UserOnboarding | undefined>;
+  updateOnboardingStep(userId: string, step: string): Promise<UserOnboarding>;
+  createUserOnboarding(userOnboarding: InsertUserOnboarding): Promise<UserOnboarding>;
 }
 
 export class MemStorage implements IStorage {
   private categories: Map<number, Category>;
   private tools: Map<number, Tool>;
   private favorites: Map<string, Set<number>>;
+  private onboarding: Map<string, UserOnboarding>;
   private currentCategoryId: number;
   private currentToolId: number;
   private currentFavoriteId: number;
+  private currentOnboardingId: number;
 
   constructor() {
     this.categories = new Map();
     this.tools = new Map();
     this.favorites = new Map();
+    this.onboarding = new Map();
     this.currentCategoryId = 1;
     this.currentToolId = 1;
     this.currentFavoriteId = 1;
+    this.currentOnboardingId = 1;
     
     this.initializeDefaultData();
   }
@@ -619,6 +628,65 @@ export class MemStorage implements IStorage {
     const userFavorites = this.favorites.get(userId);
     return userFavorites ? userFavorites.has(toolId) : false;
   }
+
+  async getUserOnboarding(userId: string): Promise<UserOnboarding | undefined> {
+    return this.onboarding.get(userId);
+  }
+
+  async updateOnboardingStep(userId: string, step: string): Promise<UserOnboarding> {
+    let existing = this.onboarding.get(userId);
+    
+    if (!existing) {
+      // Create new onboarding record
+      existing = await this.createUserOnboarding({ userId });
+    }
+
+    const updated = { ...existing };
+    switch (step) {
+      case 'welcome':
+        updated.hasSeenWelcome = true;
+        break;
+      case 'categories':
+        updated.hasSeenCategoryFilter = true;
+        break;
+      case 'search':
+        updated.hasSeenSearch = true;
+        break;
+      case 'tool-card':
+        updated.hasSeenToolCard = true;
+        break;
+      case 'export':
+        updated.hasSeenExport = true;
+        break;
+      case 'report':
+        updated.hasSeenReport = true;
+        break;
+      case 'complete':
+        updated.completedOnboarding = true;
+        break;
+    }
+
+    this.onboarding.set(userId, updated);
+    return updated;
+  }
+
+  async createUserOnboarding(insertOnboarding: InsertUserOnboarding): Promise<UserOnboarding> {
+    const id = this.currentOnboardingId++;
+    const onboarding: UserOnboarding = {
+      id,
+      userId: insertOnboarding.userId,
+      hasSeenWelcome: false,
+      hasSeenCategoryFilter: false,
+      hasSeenSearch: false,
+      hasSeenToolCard: false,
+      hasSeenExport: false,
+      hasSeenReport: false,
+      completedOnboarding: false,
+    };
+    
+    this.onboarding.set(insertOnboarding.userId, onboarding);
+    return onboarding;
+  }
 }
 
 export class DatabaseStorage implements IStorage {
@@ -718,6 +786,61 @@ export class DatabaseStorage implements IStorage {
     const [favorite] = await db.select().from(favorites)
       .where(eq(favorites.toolId, toolId) && eq(favorites.userId, userId));
     return !!favorite;
+  }
+
+  async getUserOnboarding(userId: string): Promise<UserOnboarding | undefined> {
+    const [onboarding] = await db.select().from(userOnboarding).where(eq(userOnboarding.userId, userId));
+    return onboarding || undefined;
+  }
+
+  async updateOnboardingStep(userId: string, step: string): Promise<UserOnboarding> {
+    let existing = await this.getUserOnboarding(userId);
+    
+    if (!existing) {
+      // Create new onboarding record
+      existing = await this.createUserOnboarding({ userId });
+    }
+
+    const updateData: Partial<UserOnboarding> = {};
+    switch (step) {
+      case 'welcome':
+        updateData.hasSeenWelcome = true;
+        break;
+      case 'categories':
+        updateData.hasSeenCategoryFilter = true;
+        break;
+      case 'search':
+        updateData.hasSeenSearch = true;
+        break;
+      case 'tool-card':
+        updateData.hasSeenToolCard = true;
+        break;
+      case 'export':
+        updateData.hasSeenExport = true;
+        break;
+      case 'report':
+        updateData.hasSeenReport = true;
+        break;
+      case 'complete':
+        updateData.completedOnboarding = true;
+        break;
+    }
+
+    const [updated] = await db
+      .update(userOnboarding)
+      .set(updateData)
+      .where(eq(userOnboarding.userId, userId))
+      .returning();
+
+    return updated;
+  }
+
+  async createUserOnboarding(insertOnboarding: InsertUserOnboarding): Promise<UserOnboarding> {
+    const [onboarding] = await db
+      .insert(userOnboarding)
+      .values(insertOnboarding)
+      .returning();
+    return onboarding;
   }
 }
 

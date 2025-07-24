@@ -9,9 +9,10 @@ import type { Tool } from "@shared/schema";
 interface ToolCardProps {
   tool: Tool;
   onClick: () => void;
+  'data-onboarding'?: string;
 }
 
-export default function ToolCard({ tool, onClick }: ToolCardProps) {
+export default function ToolCard({ tool, onClick, 'data-onboarding': dataOnboarding }: ToolCardProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -143,7 +144,7 @@ export default function ToolCard({ tool, onClick }: ToolCardProps) {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="tool-card cursor-pointer" onClick={onClick}>
+      <div className="tool-card cursor-pointer" onClick={onClick} data-onboarding={dataOnboarding}>
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -165,7 +166,7 @@ export default function ToolCard({ tool, onClick }: ToolCardProps) {
                   <h3 className="font-semibold text-slate-900">{tool.name}</h3>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Info className="w-4 h-4 text-slate-400 hover:text-slate-600 cursor-help" />
+                      <Info className="w-4 h-4 text-slate-400 hover:text-slate-600 cursor-help" data-onboarding="tooltip-example" />
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-sm">
                       <div className="space-y-2">

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertToolSchema } from "@shared/schema";
+import { insertToolSchema, insertUserOnboardingSchema } from "@shared/schema";
 import { z } from "zod";
 import "./types";
 
@@ -153,6 +153,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(exportData);
     } catch (error) {
       res.status(500).json({ message: "Failed to export tools" });
+    }
+  });
+
+  // Get user onboarding status
+  app.get("/api/onboarding", async (req, res) => {
+    try {
+      const userId = req.session?.id || 'anonymous';
+      const onboarding = await storage.getUserOnboarding(userId);
+      res.json(onboarding);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch onboarding status" });
+    }
+  });
+
+  // Update onboarding step
+  app.post("/api/onboarding/:step", async (req, res) => {
+    try {
+      const userId = req.session?.id || 'anonymous';
+      const step = req.params.step;
+      
+      const onboarding = await storage.updateOnboardingStep(userId, step);
+      res.json(onboarding);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update onboarding step" });
     }
   });
 

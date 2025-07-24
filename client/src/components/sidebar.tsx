@@ -48,7 +48,7 @@ export default function Sidebar({
     <aside className="lg:w-80 flex-shrink-0">
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Search Section */}
-        <div className="p-6 border-b border-slate-200">
+        <div className="p-6 border-b border-slate-200" data-onboarding="search-bar">
           <div className="relative">
             <Input
               type="text"
@@ -62,7 +62,7 @@ export default function Sidebar({
         </div>
 
         {/* Categories */}
-        <div className="p-6">
+        <div className="p-6" data-onboarding="category-list">
           <h3 className="text-sm font-semibold text-slate-900 mb-4">Categories</h3>
           <nav className="space-y-1">
             {categories.map((category) => {
