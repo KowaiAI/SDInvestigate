@@ -6,6 +6,9 @@ interface HeaderProps {
   onExport: () => void;
 }
 
+/**
+ * Renders a header component with tool count and export button.
+ */
 export default function Header({ toolCount, onExport }: HeaderProps) {
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
