@@ -42,6 +42,14 @@ d3.json("arf.json", function (json) {
   update(root);
 });
 
+/**
+ * Updates the tree layout and visual elements based on new data.
+ *
+ * This function computes a new tree layout, normalizes node depths,
+ * updates existing nodes, enters new nodes, transitions nodes to their new positions,
+ * removes exiting nodes, updates links, and transitions them accordingly.
+ * It also handles click events for toggling nodes and recursively calls itself to update the view.
+ */
 function update(source) {
   // var duration = d3.event && d3.event.altKey ? 5000 : 500;
 

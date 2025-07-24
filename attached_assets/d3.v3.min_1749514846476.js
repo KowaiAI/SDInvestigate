@@ -1,10 +1,19 @@
 d3 = (function () {
+  /**
+   * Returns the target property of the given object.
+   */
   function t(t) {
     return t.target;
   }
+  /**
+   * Returns the source property of the given object.
+   */
   function n(t) {
     return t.source;
   }
+  /**
+   * Copies properties from one object to another's prototype.
+   */
   function e(t, n) {
     try {
       for (var e in n)
@@ -13,20 +22,38 @@ d3 = (function () {
       t.prototype = n;
     }
   }
+  /**
+   * Copies an array by iterating through its elements and pushing them to a new array.
+   */
   function r(t) {
     for (var n = -1, e = t.length, r = []; e > ++n; ) r.push(t[n]);
     return r;
   }
+  /**
+   * Converts an array-like object to a true array.
+   */
   function u(t) {
     return Array.prototype.slice.call(t);
   }
+  /**
+   * Function i does nothing.
+   */
   function i() {}
+  /**
+   * Returns the input value as is.
+   */
   function a(t) {
     return t;
   }
+  /**
+   * Returns true.
+   */
   function o() {
     return !0;
   }
+  /**
+   * Returns the input if it's a function, otherwise returns a function that returns the input.
+   */
   function c(t) {
     return "function" == typeof t
       ? t
@@ -34,25 +61,43 @@ d3 = (function () {
           return t;
         };
   }
+  /**
+   * Wraps a function and returns a new function that applies context to it.
+   */
   function l(t, n, e) {
     return function () {
       var r = e.apply(n, arguments);
       return r === n ? t : r;
     };
   }
+  /**
+   * Checks if the input is neither null nor NaN.
+   */
   function f(t) {
     return null != t && !isNaN(t);
   }
+  /**
+   * Returns the length of the input string.
+   */
   function s(t) {
     return t.length;
   }
+  /**
+   * Trims and normalizes whitespace in the input string.
+   */
   function h(t) {
     return t.trim().replace(/\s+/g, " ");
   }
+  /**
+   * Multiplies a number by powers of 10 until the product is an integer.
+   */
   function g(t) {
     for (var n = 1; (t * n) % 1; ) n *= 10;
     return n;
   }
+  /**
+   * Returns a function that applies the input function `t` to `null` if `n` is falsy, otherwise returns `e`.
+   */
   function p(t) {
     return 1 === t.length
       ? function (n, e) {
@@ -60,21 +105,49 @@ d3 = (function () {
         }
       : t;
   }
+  /**
+   * Returns the response text from the given object.
+   */
   function d(t) {
     return t.responseText;
   }
+  /**
+   * Parses the response text from a given object to JSON.
+   */
   function m(t) {
     return JSON.parse(t.responseText);
   }
+  /**
+   * Creates a contextual fragment from the response text and selects it.
+   */
   function v(t) {
     var n = Li.createRange();
     return n.selectNode(Li.body), n.createContextualFragment(t.responseText);
   }
+  /**
+   * Returns the responseXML property of the given object.
+   */
   function y(t) {
     return t.responseXML;
   }
+  /**
+   * Function M does nothing.
+   */
   function M() {}
+  /**
+   * Creates a function `n` that manages event listeners and triggers them with provided arguments.
+   *
+   * The function `b` initializes an empty array `e` to store event handlers and a map-like object `r`.
+   * It returns the function `n`, which has an `on` method. The `on` method can either add or remove
+   * event listeners based on the number of arguments passed. If two arguments are provided, it adds
+   * a listener; if fewer than two, it removes the existing listener.
+   *
+   * @param {any} t - A value that is returned by both the main function and its `on` method.
+   */
   function b(t) {
+    /**
+     * Calls `on` method on each element of array `r`.
+     */
     function n() {
       for (var n, r = e, u = -1, i = r.length; i > ++u; )
         (n = r[u].on) && n.apply(this, arguments);
@@ -98,12 +171,21 @@ d3 = (function () {
       n
     );
   }
+  /**
+   * Calculates a value based on the logarithm of t and n.
+   */
   function x(t, n) {
     return n - (t ? Math.ceil(Math.log(t) / Math.LN10) : 1);
   }
+  /**
+   * Converts input to a string.
+   */
   function _(t) {
     return t + "";
   }
+  /**
+   * Creates a scaling function based on the input parameters.
+   */
   function w(t, n) {
     var e = Math.pow(10, 3 * Math.abs(8 - n));
     return {
@@ -118,27 +200,51 @@ d3 = (function () {
       symbol: t,
     };
   }
+  /**
+   * Clamps a value between 0 and 1 using a custom function if outside this range.
+   */
   function S(t) {
     return function (n) {
       return 0 >= n ? 0 : n >= 1 ? 1 : t(n);
     };
   }
+  /**
+   * Creates a function that inverts the output of the provided function `t`.
+   */
   function k(t) {
     return function (n) {
       return 1 - t(1 - n);
     };
   }
+  /**
+   * Creates a function that applies a transformation to input values based on a threshold.
+   */
   function E(t) {
     return function (n) {
       return 0.5 * (0.5 > n ? t(2 * n) : 2 - t(2 - 2 * n));
     };
   }
+  /**
+   * Squares the input value.
+   */
   function A(t) {
     return t * t;
   }
+  /**
+   * Cubes the input value.
+   */
   function N(t) {
     return t * t * t;
   }
+  /**
+   * Computes a value based on the input parameter t.
+   * The function returns 0 if t is less than or equal to 0,
+   * and 1 if t is greater than or equal to 1. For values of t
+   * between 0 and 1, it calculates a cubic polynomial expression
+   * that smoothly transitions from 0 to 1.
+   *
+   * @param {number} t - The input parameter, expected to be in the range [0, 1].
+   */
   function T(t) {
     if (0 >= t) return 0;
     if (t >= 1) return 1;
@@ -146,20 +252,35 @@ d3 = (function () {
       e = n * t;
     return 4 * (0.5 > t ? e : 3 * (t - n) + e - 0.75);
   }
+  /**
+   * Returns a function that raises a number to the power of `t`.
+   */
   function q(t) {
     return function (n) {
       return Math.pow(n, t);
     };
   }
+  /**
+   * Calculates a value based on the cosine of the input.
+   */
   function C(t) {
     return 1 - Math.cos((t * Ti) / 2);
   }
+  /**
+   * Calculates 2 raised to the power of 10 times (t - 1).
+   */
   function z(t) {
     return Math.pow(2, 10 * (t - 1));
   }
+  /**
+   * Calculates the square root of a modified input value.
+   */
   function D(t) {
     return 1 - Math.sqrt(1 - t * t);
   }
+  /**
+   * Generates an easing function based on given parameters.
+   */
   function L(t, n) {
     var e;
     return (
@@ -172,6 +293,9 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Creates and returns a cubic easing function with a given tension parameter.
+   */
   function F(t) {
     return (
       t || (t = 1.70158),
@@ -180,6 +304,9 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Calculates a value based on a series of conditional checks and mathematical operations.
+   */
   function H(t) {
     return 1 / 2.75 > t
       ? 7.5625 * t * t
@@ -189,13 +316,22 @@ d3 = (function () {
           ? 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375
           : 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
   }
+  /**
+   * Stops event propagation and prevents default action.
+   */
   function j() {
     Ci.event.stopPropagation(), Ci.event.preventDefault();
   }
+  /**
+   * Traces and returns the original source event from a series of nested events.
+   */
   function P() {
     for (var t, n = Ci.event; (t = n.sourceEvent); ) n = t;
     return n;
   }
+  /**
+   * Initializes and returns an event handler object with custom methods.
+   */
   function R(t) {
     for (var n = new M(), e = 0, r = arguments.length; r > ++e; )
       n[arguments[e]] = b(n);
@@ -213,6 +349,14 @@ d3 = (function () {
       n
     );
   }
+  /**
+   * Initializes a transformation object based on input parameters.
+   *
+   * This function calculates various transformation properties such as rotation,
+   * translation, scale, and skew. It uses helper functions `U`, `Y`, and `I` to perform
+   * intermediate calculations. The function adjusts the sign of certain values based on
+   * specific conditions to ensure correct transformations.
+   */
   function O(t) {
     var n = [t.a, t.b],
       e = [t.c, t.d],
@@ -227,19 +371,34 @@ d3 = (function () {
       (this.scale = [r, i]),
       (this.skew = i ? Math.atan2(u, i) * Di : 0);
   }
+  /**
+   * Multiplies corresponding elements of two arrays and returns their sum.
+   */
   function Y(t, n) {
     return t[0] * n[0] + t[1] * n[1];
   }
+  /**
+   * Calculates the magnitude of a 2D vector and normalizes it if non-zero.
+   */
   function U(t) {
     var n = Math.sqrt(Y(t, t));
     return n && ((t[0] /= n), (t[1] /= n)), n;
   }
+  /**
+   * Updates a vector by adding a scaled vector to it.
+   */
   function I(t, n, e) {
     return (t[0] += e * n[0]), (t[1] += e * n[1]), t;
   }
+  /**
+   * Returns an interpolation function based on the input type.
+   */
   function V(t) {
     return "transform" == t ? Ci.interpolateTransform : Ci.interpolate;
   }
+  /**
+   * Creates a linear interpolation function based on start and end values.
+   */
   function Z(t, n) {
     return (
       (n = n - (t = +t) ? 1 / (n - t) : 0),
@@ -248,6 +407,9 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Creates a clamped linear interpolation function between two values.
+   */
   function X(t, n) {
     return (
       (n = n - (t = +t) ? 1 / (n - t) : 0),
@@ -256,18 +418,42 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Function B does nothing.
+   */
   function B() {}
+  /**
+   * Creates a new instance of J with the provided parameters.
+   */
   function $(t, n, e) {
     return new J(t, n, e);
   }
+  /**
+   * Initializes a new color object with red, green, and blue components.
+   */
   function J(t, n, e) {
     (this.r = t), (this.g = n), (this.b = e);
   }
+  /**
+   * Converts a number to a two-character hexadecimal string.
+   */
   function G(t) {
     return 16 > t
       ? "0" + Math.max(0, t).toString(16)
       : Math.min(255, t).toString(16);
   }
+  /**
+   * Converts a color string to RGB format using provided conversion functions.
+   *
+   * This function first checks if the input color string matches a known pattern or is a hex code.
+   * It then parses the components of the color and converts them to RGB values, which are passed to the appropriate callback function.
+   * The function supports HSL, RGB, and Hex color formats.
+   *
+   * @param t - The color string to convert.
+   * @param n - A callback function for converting RGB values.
+   * @param e - A callback function for converting HSL values.
+   * @returns The result of calling the appropriate callback function with the parsed color components.
+   */
   function K(t, n, e) {
     var r,
       u,
@@ -306,6 +492,19 @@ d3 = (function () {
           (c = parseInt(c, 16))),
         n(a, o, c));
   }
+  /**
+   * Converts RGB color values to HSL representation.
+   *
+   * This function takes three parameters representing the red, green, and blue components of a color,
+   * normalizes them to the range [0, 1], and calculates the corresponding hue, saturation, and lightness.
+   * The hue is determined based on which component is the maximum, with adjustments for each case.
+   * Saturation is calculated differently depending on whether the lightness is above or below 0.5.
+   * If the RGB components are all equal (i.e., grayscale), both hue and saturation are set to 0.
+   *
+   * @param {number} t - The red component of the color, ranging from 0 to 255.
+   * @param {number} n - The green component of the color, ranging from 0 to 255.
+   * @param {number} e - The blue component of the color, ranging from 0 to 255.
+   */
   function W(t, n, e) {
     var r,
       u,
@@ -327,6 +526,9 @@ d3 = (function () {
       en(r, u, c)
     );
   }
+  /**
+   * Converts RGB values to CIELAB color space coordinates.
+   */
   function Q(t, n, e) {
     (t = tn(t)), (n = tn(n)), (e = tn(e));
     var r = pn((0.4124564 * t + 0.3575761 * n + 0.1804375 * e) / sa),
@@ -334,22 +536,52 @@ d3 = (function () {
       i = pn((0.0193339 * t + 0.119192 * n + 0.9503041 * e) / ga);
     return ln(116 * u - 16, 500 * (r - u), 200 * (u - i));
   }
+  /**
+   * Converts a linear RGB value to an sRGB value.
+   */
   function tn(t) {
     return 0.04045 >= (t /= 255)
       ? t / 12.92
       : Math.pow((t + 0.055) / 1.055, 2.4);
   }
+  /**
+   * Converts a percentage string to a decimal or returns the number as is.
+   */
   function nn(t) {
     var n = parseFloat(t);
     return "%" === t.charAt(t.length - 1) ? Math.round(2.55 * n) : n;
   }
+  /**
+   * Creates and returns a new instance of rn with the provided arguments.
+   */
   function en(t, n, e) {
     return new rn(t, n, e);
   }
+  /**
+   * Initializes a new color object with hue, saturation, and lightness values.
+   */
   function rn(t, n, e) {
     (this.h = t), (this.s = n), (this.l = e);
   }
+  /**
+   * Convert an HSL color to RGB format.
+   *
+   * This function takes in hue, saturation, and lightness values and converts them to red, green, and blue values.
+   * The conversion involves multiple conditional checks and calculations based on the hue value.
+   *
+   * @param t - Hue value (0-360 degrees).
+   * @param n - Saturation value (0-1).
+   * @param e - Lightness value (0-1).
+   * @returns An object containing RGB values.
+   */
   function un(t, n, e) {
+    /**
+     * Adjusts an angle value to a range between 0 and 360 degrees.
+     *
+     * This function normalizes the input angle by reducing it within one full rotation (0 to 360 degrees).
+     * It then maps the normalized angle to a specific color gradient defined by variables `i` and `a`.
+     * The logic branches based on the quarter of the circle the angle falls into, adjusting the return value accordingly.
+     */
     function r(t) {
       return (
         t > 360 ? (t -= 360) : 0 > t && (t += 360),
@@ -362,6 +594,9 @@ d3 = (function () {
               : i
       );
     }
+    /**
+     * Rounds a value to the nearest integer after scaling it by 255.
+     */
     function u(t) {
       return Math.round(255 * r(t));
     }
@@ -376,21 +611,39 @@ d3 = (function () {
       $(u(t + 120), u(t), u(t - 120))
     );
   }
+  /**
+   * Creates and returns a new instance of the class `on`.
+   */
   function an(t, n, e) {
     return new on(t, n, e);
   }
+  /**
+   * Initializes a new object with properties h, c, and l.
+   */
   function on(t, n, e) {
     (this.h = t), (this.c = n), (this.l = e);
   }
+  /**
+   * Calculates a point on a circle given an angle and radius.
+   */
   function cn(t, n, e) {
     return ln(e, Math.cos((t *= zi)) * n, Math.sin(t) * n);
   }
+  /**
+   * Creates and returns a new instance of fn with the provided arguments.
+   */
   function ln(t, n, e) {
     return new fn(t, n, e);
   }
+  /**
+   * Initializes a new object with properties l, a, and b.
+   */
   function fn(t, n, e) {
     (this.l = t), (this.a = n), (this.b = e);
   }
+  /**
+   * Converts color values from a specific space to RGB.
+   */
   function sn(t, n, e) {
     var r = (t + 16) / 116,
       u = r + n / 500,
@@ -406,50 +659,97 @@ d3 = (function () {
       )
     );
   }
+  /**
+   * Converts polar coordinates to a specific angle and radius transformation.
+   */
   function hn(t, n, e) {
     return an(180 * (Math.atan2(e, n) / Ti), Math.sqrt(n * n + e * e), t);
   }
+  /**
+   * Applies a transformation to the input value based on its threshold.
+   * @param {number} t - The input value.
+   */
   function gn(t) {
     return t > 0.206893034 ? t * t * t : (t - 4 / 29) / 7.787037;
   }
+  /**
+   * Applies a transformation to the input value based on a threshold.
+   */
   function pn(t) {
     return t > 0.008856 ? Math.pow(t, 1 / 3) : 7.787037 * t + 4 / 29;
   }
+  /**
+   * Converts a linear RGB value to an sRGB value.
+   */
   function dn(t) {
     return Math.round(
       255 * (0.00304 >= t ? 12.92 * t : 1.055 * Math.pow(t, 1 / 2.4) - 0.055),
     );
   }
+  /**
+   * Processes and returns the input object.
+   */
   function mn(t) {
     return Vi(t, ba), t;
   }
+  /**
+   * Returns a function that calls `da` with the provided argument and `this`.
+   */
   function vn(t) {
     return function () {
       return da(t, this);
     };
   }
+  /**
+   * Creates a function that invokes `ma` with the given argument and the context of `this`.
+   */
   function yn(t) {
     return function () {
       return ma(t, this);
     };
   }
+  /**
+   * Determines and returns an attribute modification function based on the input parameters.
+   *
+   * This function evaluates the provided namespace (`t`) and value (`n`) to determine which
+   * method should be used to either set or remove attributes, potentially using namespaces.
+   * It handles cases where the value is a static string, null, or a function that returns a value.
+   */
   function Mn(t, n) {
+    /**
+     * Removes an attribute from the current element.
+     */
     function e() {
       this.removeAttribute(t);
     }
+    /**
+     * Removes an attribute with a specified namespace and local name from the element.
+     */
     function r() {
       this.removeAttributeNS(t.space, t.local);
     }
+    /**
+     * Sets an attribute on the current object.
+     */
     function u() {
       this.setAttribute(t, n);
     }
+    /**
+     * Sets an attribute with a namespace and local name.
+     */
     function i() {
       this.setAttributeNS(t.space, t.local, n);
     }
+    /**
+     * Sets or removes an attribute based on the value of `e`.
+     */
     function a() {
       var e = n.apply(this, arguments);
       null == e ? this.removeAttribute(t) : this.setAttribute(t, e);
     }
+    /**
+     * Sets or removes an attribute based on the provided value.
+     */
     function o() {
       var e = n.apply(this, arguments);
       null == e
@@ -471,13 +771,25 @@ d3 = (function () {
             : u
     );
   }
+  /**
+   * Creates a regular expression to match a word boundary of the given term.
+   */
   function bn(t) {
     return RegExp("(?:^|\\s+)" + Ci.requote(t) + "(?:\\s+|$)", "g");
   }
+  /**
+   * Processes a list of callback functions and a value, applying each function to the value.
+   */
   function xn(t, n) {
+    /**
+     * Iterates over a range and calls a function with specific arguments.
+     */
     function e() {
       for (var e = -1; u > ++e; ) t[e](this, n);
     }
+    /**
+     * Executes a series of functions on the result of `n` applied to the arguments.
+     */
     function r() {
       for (var e = -1, r = n.apply(this, arguments); u > ++e; ) t[e](this, r);
     }
@@ -485,6 +797,16 @@ d3 = (function () {
     var u = t.length;
     return "function" == typeof n ? r : e;
   }
+  /**
+   * Creates and returns a function that toggles a class on an element.
+   *
+   * This function uses a regular expression to check if the class already exists
+   * on the element's className or baseVal property. It adds or removes the class
+   * based on the second parameter `r`.
+   *
+   * @param t - A string representing the class name to toggle.
+   * @returns A function that takes an element and a boolean as parameters. The function will add the class if the boolean is true, otherwise it will remove the class.
+   */
   function _n(t) {
     var n = bn(t);
     return function (e, r) {
@@ -500,13 +822,25 @@ d3 = (function () {
           ((a = h(a.replace(n, " "))), i ? (u.baseVal = a) : (e.className = a));
     };
   }
+  /**
+   * Returns a function to set or remove a CSS property based on input parameters.
+   */
   function wn(t, n, e) {
+    /**
+     * Removes a property from the element's style.
+     */
     function r() {
       this.style.removeProperty(t);
     }
+    /**
+     * Sets a CSS property on the current element.
+     */
     function u() {
       this.style.setProperty(t, n, e);
     }
+    /**
+     * Applies a style property or removes it if the value is null.
+     */
     function i() {
       var r = n.apply(this, arguments);
       null == r
@@ -515,27 +849,48 @@ d3 = (function () {
     }
     return null == n ? r : "function" == typeof n ? i : u;
   }
+  /**
+   * Returns a function to set, delete, or apply a value based on the input parameters.
+   */
   function Sn(t, n) {
+    /**
+     * Deletes a property from the current object using a key stored in `t`.
+     */
     function e() {
       delete this[t];
     }
+    /**
+     * Assigns a value to a property of the current object.
+     */
     function r() {
       this[t] = n;
     }
+    /**
+     * Updates a property in the current context with a value from `n` or deletes it if `n` returns null.
+     */
     function u() {
       var e = n.apply(this, arguments);
       null == e ? delete this[t] : (this[t] = e);
     }
     return null == n ? e : "function" == typeof n ? u : r;
   }
+  /**
+   * Wraps the input data in an object with a `__data__` property.
+   */
   function kn(t) {
     return { __data__: t };
   }
+  /**
+   * Wraps a function call with a given context.
+   */
   function En(t) {
     return function () {
       return Ma(this, t);
     };
   }
+  /**
+   * Creates a comparator function based on the provided sorting order.
+   */
   function An(t) {
     return (
       arguments.length || (t = Ci.ascending),
@@ -544,12 +899,33 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Manages event listeners by adding or removing them based on the provided parameters.
+   *
+   * This function either adds an event listener to an object or removes one, depending on whether a handler is provided.
+   * It uses a unique identifier for each event type to track and manage listeners efficiently.
+   * If a handler is provided, it sets up the listener with the given context and options.
+   * If no handler is provided, it removes any existing listener associated with the event type.
+   *
+   * @param {string} t - The event type to listen for or remove.
+   * @param {Function} n - The event handler function to attach (if present).
+   * @param {boolean|AddEventListenerOptions} e - Options for adding the event listener.
+   */
   function Nn(t, n, e) {
+    /**
+     * Removes an event listener and deletes a property from the object.
+     */
     function r() {
       var n = this[i];
       n && (this.removeEventListener(t, n, n.$), delete this[i]);
     }
+    /**
+     * Attaches an event listener to the current object and applies a function with given arguments.
+     */
     function u() {
+      /**
+       * Updates the event context and executes a function with provided arguments.
+       */
       function u(t) {
         var e = Ci.event;
         (Ci.event = t), (o[0] = a.__data__);
@@ -569,18 +945,39 @@ d3 = (function () {
       a = t.indexOf(".");
     return a > 0 && (t = t.substring(0, a)), n ? u : r;
   }
+  /**
+   * Iterates over each element in a 2D array and applies a function to non-falsy elements.
+   */
   function Tn(t, n) {
     for (var e = 0, r = t.length; r > e; e++)
       for (var u, i = t[e], a = 0, o = i.length; o > a; a++)
         (u = i[a]) && n(u, a, e);
     return t;
   }
+  /**
+   * Calls function Vi with arguments t and _a, then returns t.
+   */
   function qn(t) {
     return Vi(t, _a), t;
   }
+  /**
+   * Assigns a new ID to an object and validates it.
+   */
   function Cn(t, n) {
     return Vi(t, Sa), (t.id = n), t;
   }
+  /**
+   * Initiates a transition on an element with specified parameters.
+   *
+   * This function manages transitions by creating and scheduling them based on the provided parameters.
+   * It handles tweening, timing, and event dispatching for the transition.
+   *
+   * @param t - The target element to apply the transition to.
+   * @param n - Additional data associated with the target element.
+   * @param e - A unique identifier for the transition.
+   * @param r - An object containing transition configuration such as time, ease, delay, and duration.
+   * @returns The transition object that was created or retrieved.
+   */
   function zn(t, n, e, r) {
     var u = t.__transition__ || (t.__transition__ = { active: 0, count: 0 }),
       a = u[e];
@@ -599,6 +996,15 @@ d3 = (function () {
         ++u.count,
         Ci.timer(
           function (r) {
+            /**
+             * Determines whether to proceed with a timer or start an animation sequence based on active state.
+             *
+             * The function checks if the `active` property of `u` is greater than `e`. If true, it calls `l()`.
+             * Otherwise, it sets `u.active` to `e`, starts a timer using `h.start.call(t, f, n)`,
+             * processes each tween in `a.tween`, and schedules a new timer if the condition `c(r)` is false.
+             *
+             * @param {any} r - A parameter passed to the function, used in conditional checks and scheduling.
+             */
             function i(r) {
               return u.active > e
                 ? l()
@@ -610,12 +1016,23 @@ d3 = (function () {
                   c(r) || Ci.timer(c, 0, o),
                   1);
             }
+            /**
+             * Evaluates a condition and performs actions based on it.
+             *
+             * This function checks if `u.active` is not equal to `e`. If true, it calls `l()` and exits.
+             * Otherwise, it calculates a value `i` based on the input `r`, `g`, and `p`.
+             * It then iterates over an array `d`, calling each function in reverse order with the calculated value `a`.
+             * If `i` is greater than or equal to 1, it calls `l()`, invokes `h.end` with parameters `f` and `n`, and returns 1.
+             */
             function c(r) {
               if (u.active !== e) return l();
               for (var i = (r - g) / p, a = s(i), o = d.length; o > 0; )
                 d[--o].call(t, a);
               return i >= 1 ? (l(), h.end.call(t, f, n), 1) : void 0;
             }
+            /**
+             * Decrements the count and deletes properties based on conditions.
+             */
             function l() {
               return --u.count ? delete u[e] : delete t.__transition__, 1;
             }
@@ -634,6 +1051,9 @@ d3 = (function () {
       );
     }
   }
+  /**
+   * Creates a function to set an element's text content.
+   */
   function Dn(t) {
     return (
       null == t && (t = ""),
@@ -642,6 +1062,9 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Updates the tween of a transition for a given property and function/effect.
+   */
   function Ln(t, n, e, r) {
     var u = t.id;
     return Tn(
@@ -656,6 +1079,14 @@ d3 = (function () {
           }),
     );
   }
+  /**
+   * Executes a series of scheduled tasks based on their delays and flushes them when due.
+   *
+   * This function iterates through a linked list of scheduled tasks, checking if each task's delay has elapsed.
+   * If a task's delay has passed, it calls the task's callback with the elapsed time. After processing all tasks,
+   * it calculates the remaining time until the next execution and either sets a timeout or schedules an immediate re-execution
+   * based on whether the remaining time exceeds 24 milliseconds.
+   */
   function Fn() {
     for (var t, n = Date.now(), e = Ca; e; )
       (t = n - e.then), t >= e.delay && (e.flush = e.callback(t)), (e = e.next);
@@ -664,6 +1095,9 @@ d3 = (function () {
       ? (isFinite(r) && (clearTimeout(Na), (Na = setTimeout(Fn, r))), (Aa = 0))
       : ((Aa = 1), za(Fn));
   }
+  /**
+   * Processes a linked list of tasks and returns the minimum delay before any task is due.
+   */
   function Hn() {
     for (var t = null, n = Ca, e = 1 / 0; n; )
       n.flush
@@ -672,6 +1106,17 @@ d3 = (function () {
         : ((e = Math.min(e, n.then + n.delay)), (n = (t = n).next));
     return e;
   }
+  /**
+   * Transforms mouse event coordinates to SVG element coordinates.
+   *
+   * This function calculates the precise location of a mouse event within an SVG element,
+   * accounting for scrolling and different browser behaviors. It uses SVGPoint for accurate
+   * transformation when available, otherwise falls back to bounding client rectangle calculations.
+   *
+   * @param {SVGElement} t - The SVG element or its owner SVG element where the event occurred.
+   * @param {MouseEvent} n - The mouse event containing screen or client coordinates.
+   * @returns {[number, number]} - An array representing the [x, y] coordinates within the SVG element.
+   */
   function jn(t, n) {
     var e = t.ownerSVGElement || t;
     if (e.createSVGPoint) {
@@ -696,15 +1141,27 @@ d3 = (function () {
     var i = t.getBoundingClientRect();
     return [n.clientX - i.left - t.clientLeft, n.clientY - i.top - t.clientTop];
   }
+  /**
+   * Empty function without any implementation.
+   */
   function Pn() {}
+  /**
+   * Returns a sorted array containing the first and last elements of the input array.
+   */
   function Rn(t) {
     var n = t[0],
       e = t[t.length - 1];
     return e > n ? [n, e] : [e, n];
   }
+  /**
+   * Returns the extent of the range if available, otherwise returns the range itself.
+   */
   function On(t) {
     return t.rangeExtent ? t.rangeExtent() : Rn(t.range());
   }
+  /**
+   * Adjusts array elements based on a provided function.
+   */
   function Yn(t, n) {
     var e,
       r = 0,
@@ -717,15 +1174,37 @@ d3 = (function () {
       t
     );
   }
+  /**
+   * Returns the Math object.
+   */
   function Un() {
     return Math;
   }
+  /**
+   * Creates a linear interpolation function between two domains and ranges.
+   *
+   * This function sets up an interpolation mechanism that maps values from one domain to another,
+   * using specified parameters for clamping, interpolation method, and rounding. It provides methods
+   * to manipulate the domain, range, clamp setting, interpolation type, generate ticks, format tick values,
+   * and create a copy of the interpolator.
+   *
+   * @param {number[]} t - The input domain array.
+   * @param {any[]} n - The output range array.
+   * @param {Function} e - The interpolation function.
+   * @param {boolean} r - The clamp setting, whether to restrict values to the domain's extent.
+   */
   function In(t, n, e, r) {
+    /**
+     * Compares two arrays using a specified comparator and returns a result based on conditions.
+     */
     function u() {
       var u = Math.min(t.length, n.length) > 2 ? Gn : Jn,
         c = r ? X : Z;
       return (a = u(t, n, c, e)), (o = u(n, t, c, Ci.interpolate)), i;
     }
+    /**
+     * Calls function a with the provided argument t.
+     */
     function i(t) {
       return a(t);
     }
@@ -764,9 +1243,15 @@ d3 = (function () {
       u()
     );
   }
+  /**
+   * Binds specified methods from one object to another.
+   */
   function Vn(t, n) {
     return Ci.rebind(t, n, "range", "rangeRound", "interpolate", "clamp");
   }
+  /**
+   * Rounds a number down to the nearest power of ten and provides floor and ceil functions.
+   */
   function Zn(t) {
     return (
       (t = Math.pow(10, Math.round(Math.log(t) / Math.LN10) - 1)),
@@ -780,6 +1265,9 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Adjusts the range and step of a given array based on input parameters.
+   */
   function Xn(t, n) {
     var e = Rn(t),
       r = e[1] - e[0],
@@ -793,9 +1281,15 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Applies a range operation using provided arguments.
+   */
   function Bn(t, n) {
     return Ci.range.apply(Ci, Xn(t, n));
   }
+  /**
+   * Formats a number based on its value and precision.
+   */
   function $n(t, n) {
     return Ci.format(
       ",." +
@@ -803,6 +1297,9 @@ d3 = (function () {
         "f",
     );
   }
+  /**
+   * Composes two functions and returns a new function that applies them in sequence.
+   */
   function Jn(t, n, e, r) {
     var u = e(t[0], t[1]),
       i = r(n[0], n[1]);
@@ -810,6 +1307,9 @@ d3 = (function () {
       return i(u(t));
     };
   }
+  /**
+   * Generates a function that interpolates values between two arrays based on a given input.
+   */
   function Gn(t, n, e, r) {
     var u = [],
       i = [],
@@ -826,7 +1326,22 @@ d3 = (function () {
       return i[e](u[e](n));
     };
   }
+  /**
+   * Creates a transformed scale function based on the provided base scale and transformation functions.
+   *
+   * This function `Kn` takes two parameters: `t` (a base scale function) and `n` (a transformation object).
+   * It returns a new scale function that applies the transformation `n.pow` to the input and output of the base scale `t`.
+   * The returned scale function includes additional methods like `invert`, `domain`, `nice`, `ticks`, `tickFormat`, and `copy`,
+   * which are modified to work with the transformed values.
+   *
+   * @param t - A base scale function that defines the domain and range mapping.
+   * @param n - A transformation object with methods `pow`, `ceil`, and `floor` for mathematical operations.
+   * @returns A new scale function with transformations applied to its input and output.
+   */
   function Kn(t, n) {
+    /**
+     * Processes input through a series of functions and returns the result.
+     */
     function e(e) {
       return t(n(e));
     }
@@ -879,13 +1394,25 @@ d3 = (function () {
       Vn(e, t)
     );
   }
+  /**
+   * Calculates the logarithm base 10 of a non-negative number.
+   */
   function Wn(t) {
     return Math.log(0 > t ? 0 : t) / Math.LN10;
   }
+  /**
+   * Computes the negative logarithm base 10 of the absolute value of t.
+   */
   function Qn(t) {
     return -Math.log(t > 0 ? 0 : -t) / Math.LN10;
   }
+  /**
+   * Creates a transformed scale with an exponent applied to its domain and range.
+   */
   function te(t, n) {
+    /**
+     * Processes input through two functions and returns the result.
+     */
     function e(n) {
       return t(r(n));
     }
@@ -918,15 +1445,35 @@ d3 = (function () {
       Vn(e, t)
     );
   }
+  /**
+   * Returns a function that raises a number to the power of `t`.
+   */
   function ne(t) {
     return function (n) {
       return 0 > n ? -Math.pow(-n, t) : Math.pow(n, t);
     };
   }
+  /**
+   * Creates a scale function that maps a domain to a range with various modes and options.
+   *
+   * This function initializes an empty array `t` for the domain values and a map-like object `u` to track unique domain entries.
+   * It defines several methods to set the domain, calculate ranges in different modes (points, bands), and retrieve properties like band width and extent.
+   * The function supports chaining by returning itself after setting properties or methods.
+   *
+   * @param {Array} t - Initial array of domain values.
+   * @param {Object} n - Configuration object for the scale function.
+   * @returns {Function} The configured scale function with various methods to manipulate its range and properties.
+   */
   function ee(t, n) {
+    /**
+     * Retrieves an element from array `a` based on a computed index related to input `n`.
+     */
     function e(n) {
       return a[((u.get(n) || u.set(n, t.push(n))) - 1) % a.length];
     }
+    /**
+     * Maps a range of numbers based on the given parameters.
+     */
     function r(n, e) {
       return Ci.range(t.length).map(function (t) {
         return n + e * t;
@@ -999,13 +1546,31 @@ d3 = (function () {
       e.domain(t)
     );
   }
+  /**
+   * Constructs a function that maps quantiles to values within a specified range.
+   *
+   * This function creates an interpolator based on given input arrays `t` and `n`.
+   * It defines two inner functions: `e` for calculating quantile positions,
+   * and `r` for finding the value corresponding to a given quantile. The outer
+   * function provides methods to set and get the domain and range, as well as to
+   * retrieve the calculated quantiles and create a copy of the interpolator.
+   *
+   * @param {Array} t - Array of input values for which quantiles are calculated.
+   * @param {Array} n - Array of output values corresponding to the quantiles.
+   */
   function re(t, n) {
+    /**
+     * Computes quantiles based on input length and returns result.
+     */
     function e() {
       var e = 0,
         i = n.length;
       for (u = []; i > ++e; ) u[e - 1] = Ci.quantile(t, e / i);
       return r;
     }
+    /**
+     * Converts input to a number and returns a value from an array based on binary search index.
+     */
     function r(t) {
       return isNaN((t = +t)) ? 0 / 0 : n[Ci.bisect(u, t)];
     }
@@ -1033,10 +1598,19 @@ d3 = (function () {
       e()
     );
   }
+  /**
+   * Creates a linear interpolation function between given domain and range.
+   */
   function ue(t, n, e) {
+    /**
+     * Retrieves an element from array `e` based on a calculated index.
+     */
     function r(n) {
       return e[Math.max(0, Math.min(a, Math.floor(i * (n - t))))];
     }
+    /**
+     * Calculates a value based on array length and two indices.
+     */
     function u() {
       return (i = e.length / (n - t)), (a = e.length - 1), r;
     }
@@ -1056,7 +1630,13 @@ d3 = (function () {
       u()
     );
   }
+  /**
+   * Creates a scale function that maps domain values to range values.
+   */
   function ie(t, n) {
+    /**
+     * Retrieves an element from array `n` using a binary search index determined by `t`.
+     */
     function e(e) {
       return n[Ci.bisect(t, e)];
     }
@@ -1073,7 +1653,13 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Creates a scale function with invert, domain, range, ticks, tickFormat, and copy methods.
+   */
   function ae(t) {
+    /**
+     * Converts a value to a number.
+     */
     function n(t) {
       return +t;
     }
@@ -1095,20 +1681,56 @@ d3 = (function () {
       n
     );
   }
+  /**
+   * Returns the inner radius of the given object.
+   */
   function oe(t) {
     return t.innerRadius;
   }
+  /**
+   * Returns the outer radius of the given object.
+   */
   function ce(t) {
     return t.outerRadius;
   }
+  /**
+   * Returns the start angle of a given object.
+   */
   function le(t) {
     return t.startAngle;
   }
+  /**
+   * Returns the end angle of a given object.
+   */
   function fe(t) {
     return t.endAngle;
   }
+  /**
+   * Creates a line generator function that generates SVG path data for a given set of points.
+   *
+   * The function `se` creates a line generator with configurable x, y, defined, interpolate, and tension settings.
+   * It processes the input array `n`, which contains objects representing points. For each point, it checks if it is defined
+   * using the `defined` function. If defined, it calculates the x and y values using the provided functions and adds them to an array.
+   * The points are then interpolated using the specified interpolation method and tension value to generate a smooth path.
+   *
+   * @param t - An object containing configuration options for the line generator.
+   * @returns A function that generates SVG path data for a given set of points.
+   */
   function se(t) {
+    /**
+     * Processes an input array and generates a formatted string based on certain conditions.
+     *
+     * The function iterates over each element in the input array `n`, using callback functions
+     * `u`, `p`, and `d` to determine how to process elements. It collects processed data into
+     * arrays `s` and `f`. If a condition specified by `u` is met, it pushes formatted strings
+     * into `f`. The final result is a joined string from `f` or null if no valid entries are found.
+     *
+     * @param {Array} n - The input array to be processed.
+     */
     function n(n) {
+      /**
+       * Pushes a formatted string to array `f`.
+       */
       function a() {
         f.push("M", i(t(s), l));
       }
@@ -1150,40 +1772,78 @@ d3 = (function () {
       n
     );
   }
+  /**
+   * Returns the first element of the array.
+   */
   function he(t) {
     return t[0];
   }
+  /**
+   * Retrieves the second element from an array.
+   */
   function ge(t) {
     return t[1];
   }
+  /**
+   * Joins elements of an array with "L".
+   */
   function pe(t) {
     return t.join("L");
   }
+  /**
+   * Appends 'Z' to the result of pe function called with t.
+   */
   function de(t) {
     return pe(t) + "Z";
   }
+  /**
+   * Constructs a string from an array of tuples, encoding position changes.
+   */
   function me(t) {
     for (var n = 0, e = t.length, r = t[0], u = [r[0], ",", r[1]]; e > ++n; )
       u.push("V", (r = t[n])[1], "H", r[0]);
     return u.join("");
   }
+  /**
+   * Processes an array of points and generates a string representation.
+   */
   function ve(t) {
     for (var n = 0, e = t.length, r = t[0], u = [r[0], ",", r[1]]; e > ++n; )
       u.push("H", (r = t[n])[0], "V", r[1]);
     return u.join("");
   }
+  /**
+   * Processes an array `t` and a value `n`, returning a computed result based on its length.
+   */
   function ye(t, n) {
     return 4 > t.length ? pe(t) : t[1] + xe(t.slice(1, t.length - 1), _e(t, n));
   }
+  /**
+   * Returns a value based on the length of the input array `t`.
+   */
   function Me(t, n) {
     return 3 > t.length
       ? pe(t)
       : t[0] +
           xe((t.push(t[0]), t), _e([t[t.length - 2]].concat(t, [t[1]]), n));
   }
+  /**
+   * Returns a processed string based on input length and conditions.
+   */
   function be(t, n) {
     return 3 > t.length ? pe(t) : t[0] + xe(t, _e(t, n));
   }
+  /**
+   * Generates a string representing cubic Bezier curve commands based on input arrays.
+   *
+   * This function processes two arrays, `t` and `n`, to construct a series of SVG path
+   * data commands. It checks the lengths of the arrays and constructs quadratic or
+   * cubic Bezier segments accordingly. The logic involves conditional branching and
+   * loop iterations to append appropriate command strings to the result.
+   *
+   * @param {Array} t - An array representing control points for the Bezier curve.
+   * @param {Array} n - Another array of control points, used in conjunction with `t`.
+   */
   function xe(t, n) {
     if (1 > n.length || (t.length != n.length && t.length != n.length + 2))
       return pe(t);
@@ -1252,6 +1912,9 @@ d3 = (function () {
     }
     return r;
   }
+  /**
+   * Processes an array of points to calculate intermediate values based on a given factor.
+   */
   function _e(t, n) {
     for (
       var e, r = [], u = (1 - n) / 2, i = t[0], a = t[1], o = 1, c = t.length;
@@ -1264,6 +1927,16 @@ d3 = (function () {
         r.push([u * (a[0] - e[0]), u * (a[1] - e[1])]);
     return r;
   }
+  /**
+   * Processes an array of tuples to generate a formatted string based on specific rules.
+   *
+   * The function checks the length of the input array `t`. If its length is less than 3, it calls `pe(t)`
+   * and returns the result. Otherwise, it initializes several arrays and variables to process the input
+   * data in a loop. It uses the helper function `Ne` to update these arrays based on the current tuple
+   * being processed. Finally, it joins the elements of one of the arrays into a string and returns it.
+   *
+   * @param {Array<Array<any>>} t - An array of tuples to be processed.
+   */
   function we(t) {
     if (3 > t.length) return pe(t);
     var n = 1,
@@ -1280,6 +1953,17 @@ d3 = (function () {
       a.shift(), a.push(r[0]), o.shift(), o.push(r[1]), Ne(c, a, o);
     return c.join("");
   }
+  /**
+   * Processes an array of tuples and generates a string based on specific logic.
+   *
+   * The function first checks if the length of the input array is less than 4.
+   * If so, it returns the result of calling `pe` with the input array.
+   * Otherwise, it initializes arrays and variables to track elements and their indices,
+   * iterates through the input array, updates these arrays, and constructs a string
+   * using helper functions `Ae`, `Va`, and `Ne`.
+   *
+   * @param {Array<Array<number>>} t - The input array of tuples to be processed.
+   */
   function Se(t) {
     if (4 > t.length) return pe(t);
     for (var n, e = [], r = -1, u = t.length, i = [0], a = [0]; 3 > ++r; )
@@ -1288,6 +1972,9 @@ d3 = (function () {
       (n = t[r]), i.shift(), i.push(n[0]), a.shift(), a.push(n[1]), Ne(e, i, a);
     return e.join("");
   }
+  /**
+   * Processes an array of tuples to generate a formatted string.
+   */
   function ke(t) {
     for (var n, e, r = -1, u = t.length, i = u + 4, a = [], o = []; 4 > ++r; )
       (e = t[r % u]), a.push(e[0]), o.push(e[1]);
@@ -1300,6 +1987,9 @@ d3 = (function () {
         Ne(n, a, o);
     return n.join("");
   }
+  /**
+   * Interpolates points in an array based on a given factor and returns processed data.
+   */
   function Ee(t, n) {
     var e = t.length - 1;
     if (e)
@@ -1320,9 +2010,15 @@ d3 = (function () {
           (r[1] = n * r[1] + (1 - n) * (a + u * c));
     return we(t);
   }
+  /**
+   * Calculates the dot product of two 4-dimensional vectors.
+   */
   function Ae(t, n) {
     return t[0] * n[0] + t[1] * n[1] + t[2] * n[2] + t[3] * n[3];
   }
+  /**
+   * Appends specific formatted values to the input array.
+   */
   function Ne(t, n, e) {
     t.push(
       "C",
@@ -1339,9 +2035,15 @@ d3 = (function () {
       Ae(Va, e),
     );
   }
+  /**
+   * Calculates the slope between two points.
+   */
   function Te(t, n) {
     return (n[1] - t[1]) / (n[0] - t[0]);
   }
+  /**
+   * Computes a sequence of values based on input array elements.
+   */
   function qe(t) {
     for (
       var n = 0,
@@ -1356,6 +2058,15 @@ d3 = (function () {
       r[n] = (a + (a = Te((u = i), (i = t[n + 1])))) / 2;
     return (r[n] = a), r;
   }
+  /**
+   * Applies a smoothing algorithm to a series of points.
+   *
+   * This function processes an array of points `t` and applies a smoothing algorithm to it.
+   * It iterates through the points, calculating distances and adjusting weights accordingly.
+   * After processing, it calculates control points for each segment and returns them as an array.
+   *
+   * @param {Array<Array<number>>} t - An array of points where each point is represented by an array of numbers (e.g., [x, y]).
+   */
   function Ce(t) {
     for (var n, e, r, u, i = [], a = qe(t), o = -1, c = t.length - 1; c > ++o; )
       (n = Te(t[o], t[o + 1])),
@@ -1375,9 +2086,15 @@ d3 = (function () {
         i.push([u || 0, a[o] * u || 0]);
     return i;
   }
+  /**
+   * Returns a value based on the length of the input array.
+   */
   function ze(t) {
     return 3 > t.length ? pe(t) : t[0] + xe(t, Ce(t));
   }
+  /**
+   * Transforms polar coordinates to Cartesian coordinates in an array of points.
+   */
   function De(t) {
     for (var n, e, r, u = -1, i = t.length; i > ++u; )
       (n = t[u]),
@@ -1387,8 +2104,30 @@ d3 = (function () {
         (n[1] = e * Math.sin(r));
     return t;
   }
+  /**
+   * Generates a path string based on input data and configuration options.
+   *
+   * The function processes an array of data points, applying transformations and interpolations to generate SVG path commands.
+   * It supports various configurations such as x and y accessors, tension settings, and custom interpolation functions.
+   *
+   * @param t - Configuration object containing the data and transformation/accessor functions.
+   * @returns A string representing the SVG path or null if no valid segments are generated.
+   */
   function Le(t) {
+    /**
+     * Processes an array and generates a string based on certain conditions.
+     *
+     * This function iterates over the input array, applies transformations to each element,
+     * and constructs a string based on specific logic involving conditional checks and callbacks.
+     * It uses helper functions and closures to manage intermediate results and state.
+     *
+     * @param n - The input array to be processed.
+     * @returns A string constructed from the processed elements or null if no valid data is found.
+     */
     function n(n) {
+      /**
+       * Pushes values to array `m` based on transformations of other variables.
+       */
       function o() {
         m.push("M", l(t(y), g), h, s(t(v.reverse()), g), "Z");
       }
@@ -1470,12 +2209,21 @@ d3 = (function () {
       n
     );
   }
+  /**
+   * Returns the radius of a given object.
+   */
   function Fe(t) {
     return t.radius;
   }
+  /**
+   * Extracts and returns an array containing the x and y properties of the input object.
+   */
   function He(t) {
     return [t.x, t.y];
   }
+  /**
+   * Returns a function that calculates polar coordinates based on input parameters.
+   */
   function je(t) {
     return function () {
       var n = t.apply(this, arguments),
@@ -1484,12 +2232,21 @@ d3 = (function () {
       return [e * Math.cos(r), e * Math.sin(r)];
     };
   }
+  /**
+   * Returns a constant value of 64.
+   */
   function Pe() {
     return 64;
   }
+  /**
+   * Returns a string representing a circle shape.
+   */
   function Re() {
     return "circle";
   }
+  /**
+   * Generates a SVG path string for an ellipse based on input value t.
+   */
   function Oe(t) {
     var n = Math.sqrt(t / Ti);
     return (
@@ -1510,16 +2267,29 @@ d3 = (function () {
       "Z"
     );
   }
+  /**
+   * Sets the transform attribute of elements to translate them horizontally.
+   */
   function Ye(t, n) {
     t.attr("transform", function (t) {
       return "translate(" + n(t) + ",0)";
     });
   }
+  /**
+   * Applies a translation transformation to SVG elements based on a provided function.
+   */
   function Ue(t, n) {
     t.attr("transform", function (t) {
       return "translate(0," + n(t) + ")";
     });
   }
+  /**
+   * Generates a list of interpolated values within a specified range based on input parameters.
+   *
+   * This function calculates interpolated values between elements of an array `n` using a step count `e`.
+   * It checks if the domain of `t` is valid and processes the interpolation logic accordingly.
+   * The function returns an array of interpolated values or an empty array if conditions are not met.
+   */
   function Ie(t, n, e) {
     if (((r = []), e && n.length > 1)) {
       for (
@@ -1538,17 +2308,26 @@ d3 = (function () {
     }
     return r;
   }
+  /**
+   * Finds the common ancestor of two nodes and returns the path from the source node to the common ancestor, followed by the path from the target node to the common ancestor.
+   */
   function Ve(t) {
     for (var n = t.source, e = t.target, r = Xe(n, e), u = [n]; n !== r; )
       (n = n.parent), u.push(n);
     for (var i = u.length; e !== r; ) u.splice(i, 0, e), (e = e.parent);
     return u;
   }
+  /**
+   * Traces and returns an array of ancestors from a given node up to its root parent.
+   */
   function Ze(t) {
     for (var n = [], e = t.parent; null != e; )
       n.push(t), (t = e), (e = e.parent);
     return n.push(t), n;
   }
+  /**
+   * Finds the last common element between two arrays.
+   */
   function Xe(t, n) {
     if (t === n) return t;
     for (
@@ -1559,18 +2338,43 @@ d3 = (function () {
       (a = u), (u = e.pop()), (i = r.pop());
     return a;
   }
+  /**
+   * Sets a flag in the fixed property of the input object.
+   */
   function Be(t) {
     t.fixed |= 2;
   }
+  /**
+   * Modifies the fixed property of the input object by performing a bitwise AND operation with -7.
+   */
   function $e(t) {
     t.fixed &= -7;
   }
+  /**
+   * Sets the fixed flag and copies x, y to px, py properties of the object.
+   */
   function Je(t) {
     (t.fixed |= 4), (t.px = t.x), (t.py = t.y);
   }
+  /**
+   * Modifies the fixed property of an object by applying a bitwise AND operation with -5.
+   */
   function Ge(t) {
     t.fixed &= -5;
   }
+  /**
+   * Recursively calculates and updates the charge, center of mass, and position of nodes in a quadtree.
+   *
+   * This function traverses the quadtree structure starting from the given node `t`. It accumulates
+   * the total charge and the weighted sum of coordinates (`cx` and `cy`) for all descendant nodes.
+   * If the node contains a point, it adjusts its position slightly by adding a small random offset,
+   * calculates its charge based on the strength function `e`, and updates the total charge and center
+   * of mass accordingly. Finally, it computes the average center of mass (`cx` and `cy`) for the node.
+   *
+   * @param {Object} t - The current node in the quadtree.
+   * @param {number} n - A scaling factor for point charges.
+   * @param {Function} e - A function that determines the charge of a point based on its index.
+   */
   function Ke(t, n, e) {
     var r = 0,
       u = 0;
@@ -1593,44 +2397,80 @@ d3 = (function () {
     }
     (t.cx = r / t.charge), (t.cy = u / t.charge);
   }
+  /**
+   * Returns the x property of the input object.
+   */
   function We(t) {
     return t.x;
   }
+  /**
+   * Returns the property 'y' of the given object.
+   */
   function Qe(t) {
     return t.y;
   }
+  /**
+   * Sets the initial and current values of an object property.
+   */
   function tr(t, n, e) {
     (t.y0 = n), (t.y = e);
   }
+  /**
+   * Generates a range array of numbers from 0 to t.length - 1.
+   */
   function nr(t) {
     return Ci.range(t.length);
   }
+  /**
+   * Initializes an array of zeros with length equal to the length of the first element in the input array.
+   */
   function er(t) {
     for (var n = -1, e = t[0].length, r = []; e > ++n; ) r[n] = 0;
     return r;
   }
+  /**
+   * Finds the index of the element with the highest second value in an array of arrays.
+   */
   function rr(t) {
     for (var n, e = 1, r = 0, u = t[0][1], i = t.length; i > e; ++e)
       (n = t[e][1]) > u && ((r = e), (u = n));
     return r;
   }
+  /**
+   * Reduces an array using the `ir` function starting from an initial value of 0.
+   */
   function ur(t) {
     return t.reduce(ir, 0);
   }
+  /**
+   * Returns the sum of the first parameter and the second element of the second parameter array.
+   */
   function ir(t, n) {
     return t + n[1];
   }
+  /**
+   * Calls `or` with the given arguments after calculating a length-based value.
+   */
   function ar(t, n) {
     return or(t, Math.ceil(Math.log(n.length) / Math.LN2 + 1));
   }
+  /**
+   * Generates an array of linearly spaced numbers between two values.
+   */
   function or(t, n) {
     for (var e = -1, r = +t[0], u = (t[1] - r) / n, i = []; n >= ++e; )
       i[e] = u * e + r;
     return i;
   }
+  /**
+   * Returns an array containing the minimum and maximum values from the input array.
+   */
   function cr(t) {
     return [Ci.min(t), Ci.max(t)];
   }
+  /**
+   * Rebinds and initializes properties on a target object.
+   */
   function lr(t, n) {
     return (
       Ci.rebind(t, n, "sort", "children", "value"),
@@ -1639,15 +2479,27 @@ d3 = (function () {
       t
     );
   }
+  /**
+   * Returns the children of a given node.
+   */
   function fr(t) {
     return t.children;
   }
+  /**
+   * Returns the value of the input object.
+   */
   function sr(t) {
     return t.value;
   }
+  /**
+   * Compares two values by subtracting the first from the second.
+   */
   function hr(t, n) {
     return n.value - t.value;
   }
+  /**
+   * Merges and maps child nodes to create a source-target relationship array.
+   */
   function gr(t) {
     return Ci.merge(
       t.map(function (t) {
@@ -1657,9 +2509,15 @@ d3 = (function () {
       }),
     );
   }
+  /**
+   * Compares two objects by their value properties.
+   */
   function pr(t, n) {
     return t.value - n.value;
   }
+  /**
+   * Updates linked list pointers to insert a node after another.
+   */
   function dr(t, n) {
     var e = t._pack_next;
     (t._pack_next = n),
@@ -1667,16 +2525,34 @@ d3 = (function () {
       (n._pack_next = e),
       (e._pack_prev = n);
   }
+  /**
+   * Links two nodes in a pack structure.
+   */
   function mr(t, n) {
     (t._pack_next = n), (n._pack_prev = t);
   }
+  /**
+   * Determines if two circles with given positions and radii overlap.
+   */
   function vr(t, n) {
     var e = n.x - t.x,
       r = n.y - t.y,
       u = t.r + n.r;
     return u * u - e * e - r * r > 0.001;
   }
+  /**
+   * Performs a complex packing algorithm on a set of circular nodes within a parent node.
+   *
+   * This function calculates the positions and sizes of child nodes to pack them efficiently within a given parent node.
+   * It iterates through the children, adjusting their positions and ensuring no overlaps using various helper functions like Mr, _r, dr, and br.
+   * The final step centers the packed nodes within the bounds of the parent node and updates the radius of the parent node.
+   *
+   * @param t - The parent node containing an array of child nodes to be packed.
+   */
   function yr(t) {
+    /**
+     * Updates bounding box coordinates based on circle position and radius.
+     */
     function n(t) {
       (f = Math.min(t.x - t.r, f)),
         (s = Math.max(t.x + t.r, s)),
@@ -1747,17 +2623,29 @@ d3 = (function () {
       (t.r = M), e.forEach(br);
     }
   }
+  /**
+   * Initializes the _pack_next and _pack_prev properties of the object to itself.
+   */
   function Mr(t) {
     t._pack_next = t._pack_prev = t;
   }
+  /**
+   * Removes _pack_next and _pack_prev properties from the given object.
+   */
   function br(t) {
     delete t._pack_next, delete t._pack_prev;
   }
+  /**
+   * Recursively scales and translates tree nodes.
+   */
   function xr(t, n, e, r) {
     var u = t.children;
     if (((t.x = n += r * t.x), (t.y = e += r * t.y), (t.r *= r), u))
       for (var i = -1, a = u.length; a > ++i; ) xr(u[i], n, e, r);
   }
+  /**
+   * Adjusts the position of point `e` based on its radius and the positions of points `t` and `n`.
+   */
   function _r(t, n, e) {
     var r = t.r + e.r,
       u = n.x - t.x,
@@ -1773,6 +2661,9 @@ d3 = (function () {
       (e.x = t.x + c * u + l * i), (e.y = t.y + c * i - l * u);
     } else (e.x = t.x + r), (e.y = t.y);
   }
+  /**
+   * Adds one to the maximum y value in an array of objects.
+   */
   function wr(t) {
     return (
       1 +
@@ -1781,6 +2672,9 @@ d3 = (function () {
       })
     );
   }
+  /**
+   * Calculates the average of the 'x' property values in an array of objects.
+   */
   function Sr(t) {
     return (
       t.reduce(function (t, n) {
@@ -1788,43 +2682,83 @@ d3 = (function () {
       }, 0) / t.length
     );
   }
+  /**
+   * Recursively finds and returns the first leaf node in a tree structure.
+   */
   function kr(t) {
     var n = t.children;
     return n && n.length ? kr(n[0]) : t;
   }
+  /**
+   * Recursively finds and returns the last child of a given node.
+   */
   function Er(t) {
     var n,
       e = t.children;
     return e && (n = e.length) ? Er(e[n - 1]) : t;
   }
+  /**
+   * Compares parent properties of two objects and returns a number.
+   */
   function Ar(t, n) {
     return t.parent == n.parent ? 1 : 2;
   }
+  /**
+   * Retrieves the first child or the threaded element from a given node.
+   */
   function Nr(t) {
     var n = t.children;
     return n && n.length ? n[0] : t._tree.thread;
   }
+  /**
+   * Retrieves the last child of a tree node or its thread if no children exist.
+   */
   function Tr(t) {
     var n,
       e = t.children;
     return e && (n = e.length) ? e[n - 1] : t._tree.thread;
   }
+  /**
+   * Recursively traverses a tree structure, applying a visitor function to each node.
+   *
+   * This function processes each child of the given node `t` by recursively calling itself,
+   * and applies the visitor function `n` to each node. If the visitor function returns a value
+   * greater than 0 when applied to a child node, that child node becomes the new current node.
+   *
+   * @param {Object} t - The current node in the tree structure.
+   * @param {Function} n - The visitor function to apply to each node.
+   */
   function qr(t, n) {
     var e = t.children;
     if (e && (u = e.length))
       for (var r, u, i = -1; u > ++i; ) n((r = qr(e[i], n)), t) > 0 && (t = r);
     return t;
   }
+  /**
+   * Compares two objects' x properties and returns the difference.
+   */
   function Cr(t, n) {
     return t.x - n.x;
   }
+  /**
+   * Calculates the difference in the 'x' property between two objects.
+   */
   function zr(t, n) {
     return n.x - t.x;
   }
+  /**
+   * Compares the depth of two nodes.
+   */
   function Dr(t, n) {
     return t.depth - n.depth;
   }
+  /**
+   * Recursively traverses a tree structure and applies a function to each node.
+   */
   function Lr(t, n) {
+    /**
+     * Recursively processes children of a given node and updates references.
+     */
     function e(t, r) {
       var u = t.children;
       if (u && (a = u.length))
@@ -1834,6 +2768,9 @@ d3 = (function () {
     }
     e(t, null);
   }
+  /**
+   * Adjusts preliminary and modifier values of tree nodes.
+   */
   function Fr(t) {
     for (var n, e = 0, r = 0, u = t.children, i = u.length; --i >= 0; )
       (n = u[i]._tree),
@@ -1841,6 +2778,9 @@ d3 = (function () {
         (n.mod += e),
         (e += n.shift + (r += n.change));
   }
+  /**
+   * Adjusts change, shift, prelim, and mod properties of tree nodes.
+   */
   function Hr(t, n, e) {
     (t = t._tree), (n = n._tree);
     var r = e / (n.number - t.number);
@@ -1850,12 +2790,21 @@ d3 = (function () {
       (n.prelim += e),
       (n.mod += e);
   }
+  /**
+   * Returns the ancestor of `t` if its parent matches `n.parent`, otherwise returns `e`.
+   */
   function jr(t, n, e) {
     return t._tree.ancestor.parent == n.parent ? t._tree.ancestor : e;
   }
+  /**
+   * Creates a new object with properties x, y, dx, and dy from the input object t.
+   */
   function Pr(t) {
     return { x: t.x, y: t.y, dx: t.dx, dy: t.dy };
   }
+  /**
+   * Adjusts position and size based on input parameters.
+   */
   function Rr(t, n) {
     var e = t.x + n[3],
       r = t.y + n[0],
@@ -1867,16 +2816,40 @@ d3 = (function () {
       { x: e, y: r, dx: u, dy: i }
     );
   }
+  /**
+   * Generates a CSV parser and formatter based on the provided delimiter.
+   *
+   * The function creates an object with methods to parse and format CSV data.
+   * It includes parsing logic that handles quoted fields, newlines within quotes,
+   * and different newline characters. The formatting method converts an array of objects
+   * back into a CSV string using the specified delimiter.
+   *
+   * @param {string} t - The delimiter character used in the CSV.
+   * @param {object} n - Additional configuration options (not used in this snippet).
+   * @returns {Object} An object with `parse` and `format` methods for CSV operations.
+   */
   function Or(t, n) {
+    /**
+     * Makes an XMLHttpRequest and returns the response.
+     */
     function e(t, e) {
       return Ci.xhr(t, n, e).response(r);
     }
+    /**
+     * Parses the response text from a given object.
+     */
     function r(t) {
       return e.parse(t.responseText);
     }
+    /**
+     * Maps an array and joins the elements into a string.
+     */
     function u(n) {
       return n.map(i).join(t);
     }
+    /**
+     * Tests if a string contains a match with a regex and formats it accordingly.
+     */
     function i(t) {
       return a.test(t) ? '"' + t.replace(/\"/g, '""') + '"' : t;
     }
@@ -1902,6 +2875,17 @@ d3 = (function () {
         });
       }),
       (e.parseRows = function (t, n) {
+        /**
+         * Processes a string to extract and return a substring based on certain conditions.
+         *
+         * The function checks if the current index `f` is greater than or equal to `l`, returning `a` if true.
+         * If `u` is truthy, it returns `i` after setting `u` to false.
+         * It then searches for a double-quoted string starting at index `n`.
+         * If found, it skips over escaped quotes and updates the index `f`.
+         * If no closing quote is found, it continues searching until it reaches the end of the string or encounters a newline.
+         *
+         * @returns The extracted substring after processing.
+         */
         function e() {
           if (f >= l) return a;
           if (u) return (u = !1), i;
@@ -1947,9 +2931,15 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Calls a handler function based on the type of the input object.
+   */
   function Yr(t, n) {
     oo.hasOwnProperty(t.type) && oo[t.type](t, n);
   }
+  /**
+   * Iterates over points in a path and updates their positions.
+   */
   function Ur(t, n, e) {
     var r,
       u = -1,
@@ -1957,27 +2947,45 @@ d3 = (function () {
     for (n.lineStart(); i > ++u; ) (r = t[u]), n.point(r[0], r[1]);
     n.lineEnd();
   }
+  /**
+   * Starts a polygon, iterates through points, and ends the polygon.
+   */
   function Ir(t, n) {
     var e = -1,
       r = t.length;
     for (n.polygonStart(); r > ++e; ) Ur(t[e], n, 1);
     n.polygonEnd();
   }
+  /**
+   * Calculates the polar coordinates from Cartesian coordinates.
+   */
   function Vr(t) {
     return [Math.atan2(t[1], t[0]), Math.asin(Math.max(-1, Math.min(1, t[2])))];
   }
+  /**
+   * Checks if both elements of vector t are within a distance qi from vector n's corresponding elements.
+   */
   function Zr(t, n) {
     return qi > Math.abs(t[0] - n[0]) && qi > Math.abs(t[1] - n[1]);
   }
+  /**
+   * Converts spherical coordinates to Cartesian coordinates.
+   */
   function Xr(t) {
     var n = t[0],
       e = t[1],
       r = Math.cos(e);
     return [r * Math.cos(n), r * Math.sin(n), Math.sin(e)];
   }
+  /**
+   * Calculates the dot product of two 3-dimensional vectors.
+   */
   function Br(t, n) {
     return t[0] * n[0] + t[1] * n[1] + t[2] * n[2];
   }
+  /**
+   * Computes the cross product of two 3D vectors.
+   */
   function $r(t, n) {
     return [
       t[1] * n[2] - t[2] * n[1],
@@ -1985,24 +2993,53 @@ d3 = (function () {
       t[0] * n[1] - t[1] * n[0],
     ];
   }
+  /**
+   * Adds corresponding elements of two arrays in place.
+   */
   function Jr(t, n) {
     (t[0] += n[0]), (t[1] += n[1]), (t[2] += n[2]);
   }
+  /**
+   * Multiplies each element of a 3D vector by a scalar.
+   */
   function Gr(t, n) {
     return [t[0] * n, t[1] * n, t[2] * n];
   }
+  /**
+   * Normalizes a 3D vector to have a unit length.
+   */
   function Kr(t) {
     var n = Math.sqrt(t[0] * t[0] + t[1] * t[1] + t[2] * t[2]);
     (t[0] /= n), (t[1] /= n), (t[2] /= n);
   }
+  /**
+   * Wraps a given transformation function to create a projection wrapper.
+   *
+   * This function initializes a projection wrapper that applies a transformation to geographical coordinates before rendering them as points on a map.
+   * It handles line start, line end, polygon start, and polygon end events, ensuring smooth transitions between points and correctly handling complex geometries.
+   *
+   * The `Wr` function also provides a precision method to adjust the resolution of the projection.
+   */
   function Wr(t) {
+    /**
+     * Initializes a geometry processor with point handling functions.
+     */
     function n(n) {
+      /**
+       * Transforms and sets a point using provided coordinates.
+       */
       function r(e, r) {
         (e = t(e, r)), n.point(e[0], e[1]);
       }
+      /**
+       * Initializes point and starts a new line.
+       */
       function i() {
         (f = 0 / 0), (d.point = a), n.lineStart();
       }
+      /**
+       * Updates point coordinates and triggers an event with calculated values.
+       */
       function a(r, i) {
         var a = Xr([r, i]),
           o = t(r, i);
@@ -2024,9 +3061,15 @@ d3 = (function () {
         ),
           n.point(f, s);
       }
+      /**
+       * Assigns `r` to `d.point` and calls `n.lineEnd`.
+       */
       function o() {
         (d.point = r), n.lineEnd();
       }
+      /**
+       * Sets up the point and line end functions for an object `d`.
+       */
       function c() {
         var t, r, c, m, v, y, M;
         i(),
@@ -2062,6 +3105,29 @@ d3 = (function () {
         };
       return d;
     }
+    /**
+     * Recursively divides a path into smaller segments and applies point calculations.
+     *
+     * This function calculates the distance between two points and checks if it exceeds a threshold.
+     * If it does, it further subdivides the path by calculating midpoints and angles,
+     * then recursively calls itself to process these new segments. Points are added to
+     * the provided geometry object `m` as part of this process.
+     *
+     * @param {number} n - The x-coordinate of the starting point.
+     * @param {number} u - The y-coordinate of the starting point.
+     * @param {number} i - An angle parameter used in calculations.
+     * @param {number} a - Another coordinate or offset value.
+     * @param {number} o - Another coordinate or offset value.
+     * @param {number} c - Another coordinate or offset value.
+     * @param {number} l - The x-coordinate of the ending point.
+     * @param {number} f - The y-coordinate of the ending point.
+     * @param {number} s - Another angle parameter used in calculations.
+     * @param {number} h - Another coordinate or offset value.
+     * @param {number} g - Another coordinate or offset value.
+     * @param {number} p - Another coordinate or offset value.
+     * @param {number} d - A counter for recursive depth, decremented with each call.
+     * @param {object} m - The geometry object to which points are added.
+     */
     function e(n, u, i, a, o, c, l, f, s, h, g, p, d, m) {
       var v = l - n,
         y = f - u,
@@ -2096,7 +3162,13 @@ d3 = (function () {
       n
     );
   }
+  /**
+   * Calculates and returns a function to compute coordinates based on given parameters.
+   */
   function Qr(t, n) {
+    /**
+     * Calculates coordinates based on given parameters.
+     */
     function e(t, n) {
       var e = Math.sqrt(i - 2 * u * Math.sin(n)) / u;
       return [e * Math.sin((t *= u)), a - e * Math.cos(t)];
@@ -2116,10 +3188,30 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Processes geographical data to determine bounding box coordinates.
+   *
+   * This function initializes a stream processor that calculates the minimum and maximum latitude and longitude
+   * values from the input geometries. It uses helper functions to update these bounds as it processes points, lines,
+   * and polygons. The final result is an array of two coordinate pairs representing the bottom-left and top-right
+   * corners of the bounding box.
+   *
+   * @param {Object} t - A configuration object that defines how the stream should be processed.
+   */
   function tu(t) {
+    /**
+     * Updates the minimum and maximum values for two variables based on input parameters.
+     *
+     * This function compares the input parameters `t` and `n` with the current minimum (`r`, `u`)
+     * and maximum (`i`, `a`) values. It updates the respective minimum or maximum variable if
+     * the input parameter is outside the current range.
+     */
     function n(t, n) {
       r > t && (r = t), t > i && (i = t), u > n && (u = n), n > a && (a = n);
     }
+    /**
+     * Sets both `point` and `lineEnd` properties of `o` to `Pn`.
+     */
     function e() {
       o.point = o.lineEnd = Pn;
     }
@@ -2149,6 +3241,9 @@ d3 = (function () {
       );
     };
   }
+  /**
+   * Updates trigonometric averages based on input parameters t and n.
+   */
   function nu(t, n) {
     if (!fo) {
       ++so, (t *= zi);
@@ -2158,6 +3253,9 @@ d3 = (function () {
         (po += (Math.sin(n) - po) / so);
     }
   }
+  /**
+   * Sets up point and line end functions for mo object.
+   */
   function eu() {
     var t, n;
     (fo = 1), ru(), (fo = 2);
@@ -2169,7 +3267,13 @@ d3 = (function () {
         mo.point(t, n), uu(), (mo.lineEnd = uu);
       });
   }
+  /**
+   * Updates internal state based on spherical coordinates and recalculates angles.
+   */
   function ru() {
+    /**
+     * Updates global variables based on trigonometric calculations involving input parameters t and u.
+     */
     function t(t, u) {
       t *= zi;
       var i = Math.cos((u *= zi)),
@@ -2201,9 +3305,22 @@ d3 = (function () {
           (mo.point = t);
       }));
   }
+  /**
+   * Sets `mo.point` to `nu`.
+   */
   function uu() {
     mo.point = nu;
   }
+  /**
+   * Generates a function to plot points on a curve defined by trigonometric functions.
+   *
+   * This function calculates the cosine and sine of an angle `t`, then returns another function
+   * that plots points along a curve based on parameters `u`, `i`, `a`, and `o`. It adjusts the
+   * starting point `u` if necessary and iterates to plot points using a loop until a condition is met.
+   *
+   * @param {number} t - The initial angle in radians.
+   * @param {number} n - A multiplier for calculating the step size in the loop.
+   */
   function iu(t, n) {
     var e = Math.cos(t),
       r = Math.sin(t);
@@ -2217,32 +3334,73 @@ d3 = (function () {
         o.point((c = Vr([e, -r * Math.cos(f), -r * Math.sin(f)]))[0], c[1]);
     };
   }
+  /**
+   * Adjusts an angle based on input parameters and returns a normalized angle value.
+   */
   function au(t, n) {
     var e = Xr(n);
     (e[0] -= t), Kr(e);
     var r = Math.acos(Math.max(-1, Math.min(1, -e[1])));
     return ((0 > -e[2] ? -r : r) + 2 * Math.PI - qi) % (2 * Math.PI);
   }
+  /**
+   * Creates a function that processes geometric shapes and applies transformations.
+   *
+   * This function takes three parameters: `t`, `n`, and `e`. It returns another function that handles point and line processing,
+   * using internal functions like `u`, `i`, `a`, `o`, `c`, `l`, and `f` to manage different states of the geometric transformation.
+   *
+   * @param t - A callback function used to check conditions for points.
+   * @param n - A function that processes paths, likely related to SVG path rendering.
+   * @param e - A parameter passed to the internal processing functions, possibly a context or configuration object.
+   * @returns A function that manages geometric transformations based on the provided parameters.
+   */
   function ou(t, n, e) {
     return function (r) {
+      /**
+       * Calls `t` with `n` and `e`, and if true, calls `r.point` with `n` and `e`.
+       */
       function u(n, e) {
         t(n, e) && r.point(n, e);
       }
+      /**
+       * Calls the point method of m with t and n as arguments.
+       */
       function i(t, n) {
         m.point(t, n);
       }
+      /**
+       * Sets the point and starts a line.
+       */
       function a() {
         (v.point = i), m.lineStart();
       }
+      /**
+       * Sets `v.point` to `u` and calls `m.lineEnd`.
+       */
       function o() {
         (v.point = u), m.lineEnd();
       }
+      /**
+       * Records a point and adds it to the data array.
+       */
       function c(t, n) {
         M.point(t, n), d.push([t, n]);
       }
+      /**
+       * Initializes line start and resets data array.
+       */
       function l() {
         M.lineStart(), (d = []);
       }
+      /**
+       * Handles the main processing of data points and updates global state.
+       *
+       * This function processes an array of data `d`, cleans it, and performs operations
+       * based on the cleaning result. It updates global variables such as `h` and `g`,
+       * and modifies the rendering context `r`. The function also filters and stores
+       * processed data in arrays `s` and potentially handles edge cases where data is
+       * empty or needs reordering.
+       */
       function f() {
         c(d[0][0], d[0][1]), M.lineEnd();
         var t,
@@ -2305,6 +3463,17 @@ d3 = (function () {
       return v;
     };
   }
+  /**
+   * Processes a set of line segments and generates paths using the provided context.
+   *
+   * This function iterates over each segment, checks if it forms a simple path,
+   * and if not, splits it into points with entry/exit information. It then sorts
+   * these points and processes them to generate lines based on their properties.
+   *
+   * @param t - An array of line segments, where each segment is an array of points.
+   * @param n - A function used to calculate intersections between line segments.
+   * @param e - A context object with methods `lineStart`, `point`, and `lineEnd`.
+   */
   function cu(t, n, e) {
     var r = [],
       u = [];
@@ -2385,6 +3554,9 @@ d3 = (function () {
         e.lineEnd();
       }
   }
+  /**
+   * Links elements in an array to form a circular doubly linked list.
+   */
   function lu(t) {
     if ((n = t.length)) {
       for (var n, e, r = 0, u = t[0]; n > ++r; )
@@ -2392,15 +3564,24 @@ d3 = (function () {
       (u.next = e = t[0]), (e.prev = u);
     }
   }
+  /**
+   * Calculates a difference based on point coordinates and constants Ti, qi.
+   */
   function fu(t, n) {
     return (
       (0 > (t = t.point)[0] ? t[1] - Ti / 2 - qi : Ti / 2 - t[1]) -
       (0 > (n = n.point)[0] ? n[1] - Ti / 2 - qi : Ti / 2 - n[1])
     );
   }
+  /**
+   * Checks if the length of the input is greater than 1.
+   */
   function su(t) {
     return t.length > 1;
   }
+  /**
+   * Creates a line drawing utility with methods to start and end lines, add points, and retrieve the buffer.
+   */
   function hu() {
     var t,
       n = [];
@@ -2418,6 +3599,17 @@ d3 = (function () {
       },
     };
   }
+  /**
+   * Calculates a value based on an array of coordinates and a parameter n.
+   *
+   * The function iterates over the input array `t`, performing trigonometric calculations
+   * involving sine, cosine, and atan2 functions. It accumulates a result `a` based on conditions
+   * related to the differences between calculated values and constants `qi` and `Ti`.
+   *
+   * @param t - An array of coordinate pairs [angle, distance].
+   * @param n - A scaling parameter.
+   * @returns The accumulated value `a` after processing all coordinates.
+   */
   function gu(t, n) {
     if (!(e = t.length)) return 0;
     for (
@@ -2454,6 +3646,12 @@ d3 = (function () {
           (h = u));
     return a;
   }
+  /**
+   * Initializes a path generator with specific logic to handle line starts, points, and ends.
+   * Manages internal state to ensure proper path transitions and calculations based on input coordinates.
+   *
+   * @param {Object} t - An object providing methods `lineStart`, `point`, `lineEnd` for drawing paths.
+   */
   function pu(t) {
     var n,
       e = 0 / 0,
@@ -2495,6 +3693,9 @@ d3 = (function () {
       },
     };
   }
+  /**
+   * Calculates an angle based on given trigonometric values.
+   */
   function du(t, n, e, r) {
     var u,
       i,
@@ -2507,6 +3708,9 @@ d3 = (function () {
         )
       : (n + r) / 2;
   }
+  /**
+   * Draws a point or a set of points based on input parameters.
+   */
   function mu(t, n, e, r) {
     var u;
     if (null == t)
@@ -2525,10 +3729,38 @@ d3 = (function () {
       (u = (e * i) / 2), r.point(-i, u), r.point(0, u), r.point(i, u);
     } else r.point(n[0], n[1]);
   }
+  /**
+   * Generates a function that determines if a point is within a certain angular distance from the north pole.
+   *
+   * The function `vu` creates a clipper object with methods to handle line starts, points, and line ends.
+   * It uses helper functions `n` and `r` to determine the angular distance and calculate intersections.
+   * The clipper object also provides a method to clean up its state.
+   *
+   * @param t - The angular threshold in radians for determining proximity to the north pole.
+   * @returns A function that clips paths based on the specified angular threshold.
+   */
   function vu(t) {
+    /**
+     * Checks if the product of cosines of two angles is greater than a constant.
+     */
     function n(t, n) {
       return Math.cos(t) * Math.cos(n) > i;
     }
+    /**
+     * Creates a line segment generator with methods to start lines, handle points, and end lines.
+     *
+     * This function returns an object with methods to manage the state of line segments,
+     * including starting new lines, adding points to lines, ending lines, and determining
+     * the cleanliness of the line segment based on its state.
+     *
+     * The `lineStart` method initializes a new line segment.
+     * The `point` method adds a point to the current line segment, adjusting it if necessary.
+     * The `lineEnd` method finalizes the current line segment.
+     * The `clean` method returns an integer indicating the cleanliness of the line segments.
+     *
+     * @param t - A context object with methods `lineStart`, `point`, and `lineEnd`.
+     * @returns An object with methods to manage line segments.
+     */
     function e(t) {
       var e, u, i, a;
       return {
@@ -2561,6 +3793,9 @@ d3 = (function () {
         },
       };
     }
+    /**
+     * Rotates a vector t by an angle n around a specified axis.
+     */
     function r(t, n) {
       var e = Xr(t, 0),
         r = Xr(n, 0),
@@ -2588,7 +3823,13 @@ d3 = (function () {
       a = iu(u, 6 * zi);
     return ou(n, e, a);
   }
+  /**
+   * Combines two functions with optional inversion capability.
+   */
   function yu(t, n) {
+    /**
+     * Processes input with functions t and n.
+     */
     function e(e, r) {
       return (e = t(e, r)), n(e[0], e[1]);
     }
@@ -2601,9 +3842,15 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Returns an array containing two elements: t and n.
+   */
   function Mu(t, n) {
     return [t, n];
   }
+  /**
+   * Generates a mapping function for a given range and value.
+   */
   function bu(t, n, e) {
     var r = Ci.range(t, n - qi, e).concat(n);
     return function (t) {
@@ -2612,6 +3859,9 @@ d3 = (function () {
       });
     };
   }
+  /**
+   * Maps a range of numbers to pairs with a given value.
+   */
   function xu(t, n, e) {
     var r = Ci.range(t, n - qi, e).concat(n);
     return function (t) {
@@ -2620,9 +3870,15 @@ d3 = (function () {
       });
     };
   }
+  /**
+   * Calculates a transformed sine value.
+   */
   function _u(t) {
     return (t = Math.sin(t / 2)) * t;
   }
+  /**
+   * Calculates spherical coordinates and distance based on given parameters.
+   */
   function wu(t, n, e, r) {
     var u = Math.cos(n),
       i = Math.sin(n),
@@ -2651,6 +3907,9 @@ d3 = (function () {
           };
     return (p.distance = h), p;
   }
+  /**
+   * Calculates and returns an array based on input parameters t and n.
+   */
   function Su(t, n) {
     return [
       t / (2 * Ti),
@@ -2660,6 +3919,9 @@ d3 = (function () {
       ),
     ];
   }
+  /**
+   * Generates a string representing SVG path data for a specific shape.
+   */
   function ku(t) {
     return (
       "m0," +
@@ -2679,6 +3941,9 @@ d3 = (function () {
       "z"
     );
   }
+  /**
+   * Scales and transforms input coordinates using provided functions.
+   */
   function Eu(t) {
     var n = Wr(function (n, e) {
       return t([n * Di, e * Di]);
@@ -2709,19 +3974,37 @@ d3 = (function () {
       );
     };
   }
+  /**
+   * Initializes and returns an object with methods to generate SVG path data.
+   */
   function Au() {
+    /**
+     * Adds formatted string to array a.
+     */
     function t(t, n) {
       a.push("M", t, ",", n, i);
     }
+    /**
+     * Adds a point to the array and updates the current point reference.
+     */
     function n(t, n) {
       a.push("M", t, ",", n), (o.point = e);
     }
+    /**
+     * Pushes a formatted string to array `a`.
+     */
     function e(t, n) {
       a.push("L", t, ",", n);
     }
+    /**
+     * Sets the point property of object o to value t.
+     */
     function r() {
       o.point = t;
     }
+    /**
+     * Pushes "Z" to the array `a`.
+     */
     function u() {
       a.push("Z");
     }
@@ -2751,19 +4034,37 @@ d3 = (function () {
       };
     return o;
   }
+  /**
+   * Creates a drawing context with methods for moving, drawing arcs, lines, and closing paths.
+   */
   function Nu(t) {
+    /**
+     * Draws an arc centered at (n, e) with radius a.
+     */
     function n(n, e) {
       t.moveTo(n, e), t.arc(n, e, a, 0, 2 * Ti);
     }
+    /**
+     * Moves to a specified point and sets the current point.
+     */
     function e(n, e) {
       t.moveTo(n, e), (o.point = r);
     }
+    /**
+     * Moves the drawing cursor to the specified coordinates.
+     */
     function r(n, e) {
       t.lineTo(n, e);
     }
+    /**
+     * Sets the point property of object o to variable n.
+     */
     function u() {
       o.point = n;
     }
+    /**
+     * Closes a path in the current graphics context.
+     */
     function i() {
       t.closePath();
     }
@@ -2787,7 +4088,13 @@ d3 = (function () {
       };
     return o;
   }
+  /**
+   * Initializes and configures point processing functions.
+   */
   function Tu() {
+    /**
+     * Updates xo and reassigns r and u based on input values t and n.
+     */
     function t(t, n) {
       (xo += u * t - r * n), (r = t), (u = n);
     }
@@ -2799,10 +4106,19 @@ d3 = (function () {
         t(n, e);
       });
   }
+  /**
+   * Updates counters and totals if a condition is met.
+   */
   function qu(t, n) {
     fo || ((ho += t), (go += n), ++po);
   }
+  /**
+   * Initializes a point handling function for coordinate calculations.
+   */
   function Cu() {
+    /**
+     * Updates cumulative distances and positions based on current and previous points.
+     */
     function t(t, r) {
       var u = t - n,
         i = r - e,
@@ -2822,10 +4138,19 @@ d3 = (function () {
       (wo.point = t), (n = r), (e = u);
     };
   }
+  /**
+   * Sets the point property of the wo object to the value of qu.
+   */
   function zu() {
     wo.point = qu;
   }
+  /**
+   * Updates point coordinates and accumulates geometric calculations.
+   */
   function Du() {
+    /**
+     * Updates internal state based on input values.
+     */
     function t(t, n) {
       var e = u * t - r * n;
       (ho += e * (r + t)), (go += e * (u + n)), (po += 3 * e), (r = t), (u = n);
@@ -2839,7 +4164,13 @@ d3 = (function () {
         t(n, e);
       });
   }
+  /**
+   * Updates the point and line end positions based on given coordinates.
+   */
   function Lu() {
+    /**
+     * Updates rotation and position based on input values.
+     */
     function t(t, n) {
       (t *= zi), (n = (n * zi) / 2 + Ti / 4);
       var e = t - r,
@@ -2863,21 +4194,44 @@ d3 = (function () {
         t(n, e);
       });
   }
+  /**
+   * Returns the result of invoking a function that returns the input value.
+   */
   function Fu(t) {
     return Hu(function () {
       return t;
     })();
   }
+  /**
+   * Configures and returns a projection function for mapping geographical coordinates to screen coordinates.
+   *
+   * This function initializes several internal transformation functions and variables, including scaling, translating,
+   * centering, and rotating the map. It also defines methods to set and get various projection properties such as
+   * scale, translate, center, and rotate. The main logic involves applying transformations to input coordinates
+   * and returning the projected screen coordinates.
+   *
+   * @param t - A function that likely initializes or updates the underlying projection model.
+   * @returns A configured projection function with methods to adjust its parameters and apply transformations.
+   */
   function Hu(t) {
+    /**
+     * Transforms input coordinates and applies scaling and translation.
+     */
     function n(t) {
       return (t = a(t[0] * zi, t[1] * zi)), [t[0] * f + o, c - t[1] * f];
     }
+    /**
+     * Converts input coordinates using an inversion formula and scales them.
+     */
     function e(t) {
       return (
         (t = a.invert((t[0] - o) / f, (c - t[1]) / f)),
         t && [t[0] * Di, t[1] * Di]
       );
     }
+    /**
+     * Updates variables and returns a value based on input parameters.
+     */
     function r() {
       a = yu((i = Pu(d, m, v)), u);
       var t = u(g, p);
@@ -2935,6 +4289,9 @@ d3 = (function () {
       }
     );
   }
+  /**
+   * Wraps a projection object to transform coordinates and handle spherical geometry.
+   */
   function ju(t, n) {
     return {
       point: function (e, r) {
@@ -2959,19 +4316,44 @@ d3 = (function () {
       },
     };
   }
+  /**
+   * Determines the output based on the provided arguments.
+   *
+   * This function checks if `t` is truthy. If it is, it further checks if either `n`
+   * or `e` is truthy. If so, it returns the result of `yu(Ou(t), Yu(n, e))`.
+   * Otherwise, it returns the result of `Ou(t)`. If `t` is falsy, it checks if either
+   * `n` or `e` is truthy and returns the result of `Yu(n, e)` in that case.
+   * If both `t`, `n`, and `e` are falsy, it returns `Mu`.
+   *
+   * @param {*} t - The first input parameter.
+   * @param {*} n - The second input parameter.
+   * @param {*} e - The third input parameter.
+   */
   function Pu(t, n, e) {
     return t ? (n || e ? yu(Ou(t), Yu(n, e)) : Ou(t)) : n || e ? Yu(n, e) : Mu;
   }
+  /**
+   * Adjusts a value by adding an offset and ensures it wraps within a specific range.
+   */
   function Ru(t) {
     return function (n, e) {
       return (n += t), [n > Ti ? n - 2 * Ti : -Ti > n ? n + 2 * Ti : n, e];
     };
   }
+  /**
+   * Creates and returns an object with inverted properties based on input.
+   */
   function Ou(t) {
     var n = Ru(t);
     return (n.invert = Ru(-t)), n;
   }
+  /**
+   * Calculates the transformation of coordinates based on spherical trigonometry.
+   */
   function Yu(t, n) {
+    /**
+     * Calculates and returns an array of two angles based on input parameters t and n.
+     */
     function e(t, n) {
       var e = Math.cos(n),
         o = Math.cos(t) * e,
@@ -3002,7 +4384,13 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Defines a function that calculates spherical coordinates based on input functions and parameters.
+   */
   function Uu(t, n) {
+    /**
+     * Computes a transformed vector based on input angles and a transformation function t.
+     */
     function e(n, e) {
       var r = Math.cos(n),
         u = Math.cos(e),
@@ -3020,6 +4408,9 @@ d3 = (function () {
       e
     );
   }
+  /**
+   * Determines if a point is to the left of an edge defined by two points.
+   */
   function Iu(t, n, e, r) {
     var u, i, a, o, c, l, f;
     return (
@@ -3035,9 +4426,15 @@ d3 = (function () {
       (f - a) * (o - i) - (c - a) * (l - i) > 0
     );
   }
+  /**
+   * Determines if a point t is to the left of the line segment from n to e.
+   */
   function Vu(t, n, e) {
     return (e[0] - n[0]) * (t[1] - n[1]) < (e[1] - n[1]) * (t[0] - n[0]);
   }
+  /**
+   * Calculates the intersection point of two lines in 2D space.
+   */
   function Zu(t, n, e, r) {
     var u = t[0],
       i = e[0],
@@ -3050,6 +4447,16 @@ d3 = (function () {
       h = (o * (c - l) - s * (u - i)) / (s * a - o * f);
     return [u + h * a, c + h * f];
   }
+  /**
+   * This function implements a Voronoi diagram algorithm to process an array of points and generate half-edges.
+   *
+   * It initializes structures to manage sites, edges, and events, then iteratively processes each site,
+   * calculating bisectors and intersections. The function updates half-edge lists and handles edge endpoints,
+   * ultimately invoking a callback `n` for each final edge.
+   *
+   * @param t - An array of points where each point is represented as an array `[x, y]`.
+   * @param n - A callback function invoked with the final edges after processing.
+   */
   function Xu(t, n) {
     var e = {
         list: t
@@ -3265,9 +4672,26 @@ d3 = (function () {
       }
     for (o = r.right(r.leftEnd); o != r.rightEnd; o = r.right(o)) n(o.edge);
   }
+  /**
+   * Initializes a new object with default properties.
+   */
   function Bu() {
     return { leaf: !0, nodes: [], point: null };
   }
+  /**
+   * Recursively applies a predicate function to sub-nodes of a given node.
+   *
+   * This function checks if the predicate `t` returns false for the current node
+   * and its children. If false, it calculates midpoints and recursively calls itself
+   * on each child node with updated bounds.
+   *
+   * @param {function} t - The predicate function to apply.
+   * @param {Object} n - The current node being processed.
+   * @param {number} e - The minimum x-coordinate of the bounding box.
+   * @param {number} r - The minimum y-coordinate of the bounding box.
+   * @param {number} u - The maximum x-coordinate of the bounding box.
+   * @param {number} i - The maximum y-coordinate of the bounding box.
+   */
   function $u(t, n, e, r, u, i) {
     if (!t(n, e, r, u, i)) {
       var a = 0.5 * (e + u),
@@ -3279,11 +4703,27 @@ d3 = (function () {
         c[3] && $u(t, c[3], a, o, u, i);
     }
   }
+  /**
+   * Initializes a date object using either a timestamp or UTC arguments.
+   */
   function Ju() {
     this._ = new Date(
       arguments.length > 1 ? Date.UTC.apply(this, arguments) : arguments[0],
     );
   }
+  /**
+   * Function Gu performs pattern matching on input strings with support for wildcards.
+   *
+   * It iterates through each character of the string `n`, checking for matches against the string `e`.
+   * If a wildcard '%' is encountered in `n`, it delegates to the function `$o[n.charAt(a++)]` to handle the wildcard logic.
+   * If any mismatch occurs or if the end of `e` is reached without matching all of `n`, it returns -1.
+   *
+   * @param t - The first input string (unused in the provided code).
+   * @param n - The pattern string containing characters and wildcards ('%').
+   * @param e - The target string to match against.
+   * @param r - The current position index in the target string `e`.
+   * @returns The updated position index `r` if all characters in `n` are matched successfully, otherwise -1.
+   */
   function Gu(t, n, e, r) {
     for (var u, i, a = 0, o = n.length, c = e.length; o > a; ) {
       if (r >= c) return -1;
@@ -3293,95 +4733,158 @@ d3 = (function () {
     }
     return r;
   }
+  /**
+   * Creates a case-insensitive regular expression matching any of the given strings.
+   */
   function Ku(t) {
     return RegExp("^(?:" + t.map(Ci.requote).join("|") + ")", "i");
   }
+  /**
+   * Constructs a map from lowercased keys to their original indices.
+   */
   function Wu(t) {
     for (var n = new i(), e = -1, r = t.length; r > ++e; )
       n.set(t[e].toLowerCase(), e);
     return n;
   }
+  /**
+   * Pads a string with a specified character to reach a minimum length.
+   */
   function Qu(t, n, e) {
     t += "";
     var r = t.length;
     return e > r ? Array(e - r + 1).join(n) + t : t;
   }
+  /**
+   * Executes a regular expression on a substring of `n` starting from index `e`.
+   */
   function ti(t, n, e) {
     Yo.lastIndex = 0;
     var r = Yo.exec(n.substring(e));
     return r ? (e += r[0].length) : -1;
   }
+  /**
+   * Executes a regular expression on a substring of `n` starting at index `e`.
+   */
   function ni(t, n, e) {
     Oo.lastIndex = 0;
     var r = Oo.exec(n.substring(e));
     return r ? (e += r[0].length) : -1;
   }
+  /**
+   * Updates match position and token metadata based on regex execution.
+   */
   function ei(t, n, e) {
     Vo.lastIndex = 0;
     var r = Vo.exec(n.substring(e));
     return r ? ((t.m = Zo.get(r[0].toLowerCase())), (e += r[0].length)) : -1;
   }
+  /**
+   * Executes a regular expression on a substring and updates the match index.
+   */
   function ri(t, n, e) {
     Uo.lastIndex = 0;
     var r = Uo.exec(n.substring(e));
     return r ? ((t.m = Io.get(r[0].toLowerCase())), (e += r[0].length)) : -1;
   }
+  /**
+   * Calls Gu with specific arguments.
+   */
   function ui(t, n, e) {
     return Gu(t, "" + Bo.c, n, e);
   }
+  /**
+   * Calls Gu with specific arguments.
+   */
   function ii(t, n, e) {
     return Gu(t, "" + Bo.x, n, e);
   }
+  /**
+   * Calls the Gu function with specific arguments.
+   */
   function ai(t, n, e) {
     return Gu(t, "" + Bo.X, n, e);
   }
+  /**
+   * Parses a substring to extract a numeric value and updates the index.
+   */
   function oi(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 4));
     return r ? ((t.y = +r[0]), (e += r[0].length)) : -1;
   }
+  /**
+   * Processes a substring to extract and set year information.
+   */
   function ci(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 2));
     return r ? ((t.y = li(+r[0])), (e += r[0].length)) : -1;
   }
+  /**
+   * Adjusts the input year by adding a century value based on its magnitude.
+   */
   function li(t) {
     return t + (t > 68 ? 1900 : 2e3);
   }
+  /**
+   * Updates match index and advances position if pattern is found.
+   */
   function fi(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 2));
     return r ? ((t.m = r[0] - 1), (e += r[0].length)) : -1;
   }
+  /**
+   * Updates position and date object based on substring match.
+   */
   function si(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 2));
     return r ? ((t.d = +r[0]), (e += r[0].length)) : -1;
   }
+  /**
+   * Updates the object H with a parsed value from the substring and advances the index.
+   */
   function hi(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 2));
     return r ? ((t.H = +r[0]), (e += r[0].length)) : -1;
   }
+  /**
+   * Parses a substring to extract a numeric value and updates the index.
+   */
   function gi(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 2));
     return r ? ((t.M = +r[0]), (e += r[0].length)) : -1;
   }
+  /**
+   * Updates S property and advances index if a match is found.
+   */
   function pi(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 2));
     return r ? ((t.S = +r[0]), (e += r[0].length)) : -1;
   }
+  /**
+   * Parses a numeric value from a substring and updates the offset.
+   */
   function di(t, n, e) {
     Jo.lastIndex = 0;
     var r = Jo.exec(n.substring(e, e + 3));
     return r ? ((t.L = +r[0]), (e += r[0].length)) : -1;
   }
+  /**
+   * Retrieves a value from Go based on a substring of n, updates t.p, and returns the updated index e.
+   */
   function mi(t, n, e) {
     var r = Go.get(n.substring(e, (e += 2)).toLowerCase());
     return null == r ? -1 : ((t.p = r), e);
   }
+  /**
+   * Converts a timezone offset to a string in GMT format.
+   */
   function vi(t) {
     var n = t.getTimezoneOffset(),
       e = n > 0 ? "-" : "+",
@@ -3389,21 +4892,61 @@ d3 = (function () {
       u = Math.abs(n) % 60;
     return e + Qu(r, "0", 2) + Qu(u, "0", 2);
   }
+  /**
+   * Converts a date to an ISO string.
+   */
   function yi(t) {
     return t.toISOString();
   }
+  /**
+   * Modifies a date-like object to provide custom rounding, flooring, and other operations.
+   *
+   * This function extends the functionality of a date-like object `t` by adding methods for
+   * custom rounding (`round`), flooring (`floor`), ceiling (`ceil`), offsetting (`offset`),
+   * and generating ranges (`range`). It uses helper functions `r`, `u`, `i`, `a`, and `o`
+   * to implement these operations. The function also temporarily changes the behavior of a
+   * global object `qo` (presumably `Date`) during its execution.
+   *
+   * @param {Object} t - The date-like object to be extended with new methods.
+   * @param {Function} n - A helper function that modifies the state of `t`.
+   * @param {Function} e - A function that checks a condition on elements in a range.
+   */
   function Mi(t, n, e) {
+    /**
+     * Determines the closest value to `n` that is a power of two.
+     */
     function r(n) {
       var e = t(n),
         r = i(e, 1);
       return r - n > n - e ? e : r;
     }
+    /**
+     * Adjusts and returns a value after processing it through specific functions.
+     */
     function u(e) {
       return n((e = t(new qo(e - 1))), 1), e;
     }
+    /**
+     * Processes and returns a modified timestamp object.
+     */
     function i(t, e) {
       return n((t = new qo(+t)), e), t;
     }
+    /**
+     * Generates an array of dates based on given parameters.
+     *
+     * This function iterates from a start date up to a specified end date,
+     * adding dates to the result array either by checking if they meet a certain
+     * condition (if `i > 1`) or simply incrementing without checks. The iteration
+     * uses helper functions `u`, `e`, and `n` to manage date conversion and
+     * conditional logic.
+     *
+     * @param {any} t - The starting value used to initialize the start date.
+     * @param {number} r - The end date limit for the iteration.
+     * @param {number} i - A condition factor that determines if a date should be
+     *                      checked before adding it to the result array.
+     * @returns {Date[]} An array of Date objects generated within the specified range.
+     */
     function a(t, r, i) {
       var a = u(t),
         o = [];
@@ -3411,6 +4954,9 @@ d3 = (function () {
       else for (; r > a; ) o.push(new Date(+a)), n(a, 1);
       return o;
     }
+    /**
+     * Initializes a new Ju object and processes it with given parameters.
+     */
     function o(t, n, e) {
       try {
         qo = Ju;
@@ -3431,6 +4977,9 @@ d3 = (function () {
       t
     );
   }
+  /**
+   * Creates a function that applies a given transformation to an object and returns the result.
+   */
   function bi(t) {
     return function (n, e) {
       try {
@@ -3442,7 +4991,22 @@ d3 = (function () {
       }
     };
   }
+  /**
+   * Creates a custom scale function with additional methods for domain manipulation and tick generation.
+   *
+   * This function wraps an existing scale `t` and extends it with methods to invert values, set and get the domain,
+   * make the domain "nice", generate ticks, format tick marks, and create copies of the scale. It leverages helper
+   * functions and arrays like `wi`, `Yn`, `_i`, `Ci.bisect`, `Wo`, `n.year`, `e[0].range`, and others to perform
+   * these operations efficiently.
+   *
+   * @param {Function} t - The base scale function to be extended.
+   * @param {Object} n - An object containing methods for different time scales (e.g., year, month).
+   * @param {Function} e - A function used to format tick marks.
+   */
   function xi(t, n, e) {
+    /**
+     * Returns the result of calling function t with the given argument n.
+     */
     function r(n) {
       return t(n);
     }
@@ -3484,34 +5048,55 @@ d3 = (function () {
       Ci.rebind(r, t, "range", "rangeRound", "interpolate", "clamp")
     );
   }
+  /**
+   * Returns a sorted array containing the first and last elements of the input array.
+   */
   function _i(t) {
     var n = t[0],
       e = t[t.length - 1];
     return e > n ? [n, e] : [e, n];
   }
+  /**
+   * Converts a timestamp to a Date object.
+   */
   function wi(t) {
     return new Date(t);
   }
+  /**
+   * Creates a function that processes input through a series of conditions and corresponding actions.
+   */
   function Si(t) {
     return function (n) {
       for (var e = t.length - 1, r = t[e]; !r[1](n); ) r = t[--e];
       return r[0](n);
     };
   }
+  /**
+   * Sets the year of a date object to the given year and returns it.
+   */
   function ki(t) {
     var n = new Date(t, 0, 1);
     return n.setFullYear(t), n;
   }
+  /**
+   * Calculates a value based on the given date and its position between two fiscal years.
+   */
   function Ei(t) {
     var n = t.getFullYear(),
       e = ki(n),
       r = ki(n + 1);
     return n + (t - e) / (r - e);
   }
+  /**
+   * Creates a date object representing the first day of the given year in UTC.
+   */
   function Ai(t) {
     var n = new Date(Date.UTC(t, 0, 1));
     return n.setUTCFullYear(t), n;
   }
+  /**
+   * Calculates a normalized year value based on the given date.
+   */
   function Ni(t) {
     var n = t.getUTCFullYear(),
       e = Ai(n),
@@ -3782,6 +5367,16 @@ d3 = (function () {
   (Ci.bisectLeft = Bi.left),
     (Ci.bisect = Ci.bisectRight = Bi.right),
     (Ci.nest = function () {
+      /**
+       * Recursively groups elements of an array based on a series of transformation functions.
+       *
+       * This function takes an array `n` and a list of transformation functions `a`. It applies each
+       * transformation in sequence to group the elements of `n`. If all transformations have been applied,
+       * it sorts or processes the array using optional callbacks `e` or `r`.
+       *
+       * @param {Array} n - The array to be processed.
+       * @param {number} o - The index of the current transformation function in list `a`.
+       */
       function t(n, o) {
         if (o >= a.length) return r ? r.call(u, n) : e ? n.sort(e) : n;
         for (
@@ -3797,6 +5392,16 @@ d3 = (function () {
           d
         );
       }
+      /**
+       * Recursively processes an object and returns a sorted array of key-value pairs.
+       *
+       * This function traverses the input object `t` recursively, applying sorting based on the comparator function at index `e`
+       * in the global array `a`. It constructs an array of objects containing keys and their corresponding processed values.
+       * If no comparator is available or all elements are processed, it returns the constructed array.
+       *
+       * @param {Object} t - The input object to process.
+       * @param {number} e - The current index in the global array `a` used for sorting.
+       */
       function n(t, e) {
         if (e >= a.length) return t;
         var r,
@@ -3884,6 +5489,13 @@ d3 = (function () {
     return n ? Math.round(t * (n = Math.pow(10, n))) / n : Math.round(t);
   }),
     (Ci.xhr = function (t, n, e) {
+      /**
+       * Evaluates the HTTP response status and calls either the load or error method on the 'i' object.
+       *
+       * This function checks the HTTP status of a request stored in 'l'. If the status is within the 200-299 range,
+       * or if it is exactly 304, it calls the 'load' method on 'i', passing the result of 'c.call(u, l)'. Otherwise,
+       * it calls the 'error' method on 'i', passing 'l'.
+       */
       function r() {
         var t = l.status;
         (!t && l.responseText) || (t >= 200 && 300 > t) || 304 === t
@@ -4895,21 +6507,33 @@ d3 = (function () {
         : this.node().innerHTML;
     }),
     (ba.append = function (t) {
+      /**
+       * Appends a new element to the current node.
+       */
       function n() {
         return this.appendChild(Li.createElementNS(this.namespaceURI, t));
       }
+      /**
+       * Appends a new element to the current node.
+       */
       function e() {
         return this.appendChild(Li.createElementNS(t.space, t.local));
       }
       return (t = Ci.ns.qualify(t)), this.select(t.local ? e : n);
     }),
     (ba.insert = function (t, n) {
+      /**
+       * Inserts a new element before a reference node.
+       */
       function e() {
         return this.insertBefore(
           Li.createElementNS(this.namespaceURI, t),
           da(n, this),
         );
       }
+      /**
+       * Inserts a new element before a specified reference node.
+       */
       function r() {
         return this.insertBefore(
           Li.createElementNS(t.space, t.local),
@@ -4925,6 +6549,16 @@ d3 = (function () {
       });
     }),
     (ba.data = function (t, n) {
+      /**
+       * Compares two arrays and updates their mappings based on a key function.
+       *
+       * This function processes two input arrays, `t` and `e`, to find matches based on a key function `n`.
+       * It creates three arrays: `g` for matched elements from `e`, `p` for new elements from `e`, and `d` for unmatched elements from `t`.
+       * If a key function is provided (`n`), it uses this function to compare elements; otherwise, it directly compares the elements.
+       *
+       * @param t - The first array of elements.
+       * @param e - The second array of elements.
+       */
       function e(t, e) {
         var r,
           u,
@@ -5160,9 +6794,15 @@ d3 = (function () {
       return Cn(u, this.id, this.time).ease(this.ease());
     }),
     (Sa.attr = function (t, n) {
+      /**
+       * Removes an attribute from the current element.
+       */
       function e() {
         this.removeAttribute(i);
       }
+      /**
+       * Removes an attribute from the element using a namespace and local name.
+       */
       function r() {
         this.removeAttributeNS(i.space, i.local);
       }
@@ -5173,6 +6813,9 @@ d3 = (function () {
       var u = V(t),
         i = Ci.ns.qualify(t);
       return Ln(this, "attr." + t, n, function (t) {
+        /**
+         * Checks an attribute and returns a function to update it if necessary.
+         */
         function n() {
           var n,
             e = this.getAttribute(i);
@@ -5184,6 +6827,9 @@ d3 = (function () {
             })
           );
         }
+        /**
+         * Returns a function to set an attribute if its current value is not equal to t.
+         */
         function a() {
           var n,
             e = this.getAttributeNS(i.space, i.local);
@@ -5199,6 +6845,9 @@ d3 = (function () {
       });
     }),
     (Sa.attrTween = function (t, n) {
+      /**
+       * Processes attributes and returns a function to set an attribute.
+       */
       function e(t, e) {
         var r = n.call(this, t, e, this.getAttribute(u));
         return (
@@ -5208,6 +6857,9 @@ d3 = (function () {
           }
         );
       }
+      /**
+       * Processes and sets an attribute based on input values.
+       */
       function r(t, e) {
         var r = n.call(this, t, e, this.getAttributeNS(u.space, u.local));
         return (
@@ -5221,6 +6873,9 @@ d3 = (function () {
       return this.tween("attr." + t, u.local ? r : e);
     }),
     (Sa.style = function (t, n, e) {
+      /**
+       * Removes a specified CSS property from the current element's style.
+       */
       function r() {
         this.style.removeProperty(t);
       }
@@ -5235,6 +6890,9 @@ d3 = (function () {
       }
       var i = V(t);
       return Ln(this, "style." + t, n, function (n) {
+        /**
+         * Checks if computed style property is different from a given value and returns a function to update it.
+         */
         function u() {
           var r,
             u = Fi.getComputedStyle(this, null).getPropertyValue(t);
@@ -5538,6 +7196,12 @@ d3 = (function () {
     }),
     (Ci.svg = {}),
     (Ci.svg.arc = function () {
+      /**
+       * Generates a path string based on input parameters and conditions.
+       * The function calculates various trigonometric values and conditional logic to determine the final SVG path.
+       * It uses helper functions `n`, `e`, `r`, and `u` to get input values, adjusts them with `Ra`, and compares them.
+       * Depending on the comparison result, it constructs an SVG path string using these values and returns it.
+       */
       function t() {
         var t = n.apply(this, arguments),
           i = e.apply(this, arguments),
@@ -5720,6 +7384,9 @@ d3 = (function () {
       );
     }),
     (Ci.svg.chord = function () {
+      /**
+       * Constructs an SVG path string based on input parameters.
+       */
       function e(t, n) {
         var e = r(this, o, t, n),
           c = r(this, l, t, n);
@@ -5735,6 +7402,9 @@ d3 = (function () {
           "Z"
         );
       }
+      /**
+       * Computes and returns a set of geometric properties based on input parameters.
+       */
       function r(t, n, e, r) {
         var u = n.call(t, e, r),
           i = f.call(t, u, r),
@@ -5748,12 +7418,21 @@ d3 = (function () {
           p1: [i * Math.cos(o), i * Math.sin(o)],
         };
       }
+      /**
+       * Checks if two objects have equal properties a0 and a1.
+       */
       function u(t, n) {
         return t.a0 == n.a0 && t.a1 == n.a1;
       }
+      /**
+       * Concatenates and formats input values into a specific string pattern.
+       */
       function i(t, n, e) {
         return "A" + t + "," + t + " 0 " + +(e > Ti) + ",1 " + n;
       }
+      /**
+       * Constructs a string in the format "Q 0,0 {r}".
+       */
       function a(t, n, e, r) {
         return "Q 0,0 " + r;
       }
@@ -5782,6 +7461,9 @@ d3 = (function () {
       );
     }),
     (Ci.svg.diagonal = function () {
+      /**
+       * Generates a cubic Bezier path string from two points.
+       */
       function e(t, n) {
         var e = r.call(this, t, n),
           a = u.call(this, t, n),
@@ -5819,6 +7501,9 @@ d3 = (function () {
       );
     }),
     (Ci.svg.symbol = function () {
+      /**
+       * Retrieves a value from Za or defaults to Oe, then applies e with the given arguments.
+       */
       function t(t, r) {
         return (Za.get(n.call(this, t, r)) || Oe)(e.call(this, t, r));
       }
@@ -5910,6 +7595,15 @@ d3 = (function () {
   var Xa = Math.sqrt(3),
     Ba = Math.tan(30 * zi);
   Ci.svg.axis = function () {
+    /**
+     * Processes each element to update ticks and domains based on specified orientation and configuration.
+     *
+     * This function updates minor and major ticks, as well as the domain path, based on the orientation (bottom, top, left, right)
+     * and applies transformations or styling as needed. It handles transitions for entering, updating, and exiting elements
+     * to ensure smooth animations and visual consistency.
+     *
+     * @param t - The context or selection of elements to process.
+     */
     function t(t) {
       t.each(function () {
         var t,
@@ -6052,6 +7746,16 @@ d3 = (function () {
   var $a = "bottom",
     Ja = { top: 1, right: 1, bottom: 1, left: 1 };
   Ci.svg.brush = function () {
+    /**
+     * Updates and manages brush elements within a selection.
+     *
+     * This function iterates over each element in the provided selection `i`,
+     * updating various SVG elements such as backgrounds, extents, and resize handles.
+     * It sets up event listeners for mouse and touch events, manages DOM entries and exits,
+     * and applies styles based on the state of the brush (empty or not).
+     *
+     * The function leverages D3.js methods to manipulate SVG elements and their attributes.
+     */
     function t(i) {
       i.each(function () {
         var i,
@@ -6102,6 +7806,9 @@ d3 = (function () {
           n(a);
       });
     }
+    /**
+     * Updates the transformation attribute of resize elements based on specific conditions.
+     */
     function n(t) {
       t.selectAll(".resize").attr("transform", function (t) {
         return (
@@ -6109,31 +7816,64 @@ d3 = (function () {
         );
       });
     }
+    /**
+     * Updates the x attribute and width of selected elements in a d3 selection.
+     */
     function e(t) {
       t.select(".extent").attr("x", f[0][0]),
         t.selectAll(".extent,.n>rect,.s>rect").attr("width", f[1][0] - f[0][0]);
     }
+    /**
+     * Sets the y attribute of ".extent" and updates the height of ".extent,.e>rect,.w>rect".
+     */
     function r(t) {
       t.select(".extent").attr("y", f[0][1]),
         t
           .selectAll(".extent,.e>rect,.w>rect")
           .attr("height", f[1][1] - f[0][1]);
     }
+    /**
+     * Handles brush events and updates the selection accordingly.
+     *
+     * This function manages various brush interactions including touch, mouse,
+     * and keyboard events. It adjusts the brush position based on user input,
+     * ensuring that constraints are respected and events are properly emitted.
+     *
+     * @returns void
+     */
     function u() {
+      /**
+       * Retrieves touch or mouse event details based on available touches.
+       */
       function u() {
         var t = Ci.event.changedTouches;
         return t ? Ci.touches(v, t)[0] : Ci.mouse(v);
       }
+      /**
+       * Handles a key event, adjusting position and state if necessary.
+       */
       function l() {
         32 == Ci.event.keyCode &&
           (S || ((d = null), (k[0] -= f[1][0]), (k[1] -= f[1][1]), (S = 2)),
           j());
       }
+      /**
+       * Updates coordinates and resets state on specific key event.
+       */
       function s() {
         32 == Ci.event.keyCode &&
           2 == S &&
           ((k[0] += f[1][0]), (k[1] += f[1][1]), (S = 0), j());
       }
+      /**
+       * Function `h` updates a brush state based on various conditions and events.
+       *
+       * It initializes variables, adjusts coordinates based on global state `m`, and checks for alternate key events.
+       * It then determines if the brush should be moved or resized, updating its position accordingly.
+       * Finally, it emits an event to notify of the brush's updated state.
+       *
+       * @returns void
+       */
       function h() {
         var t = u(),
           i = !1;
@@ -6148,6 +7888,17 @@ d3 = (function () {
           w && g(t, c, 1) && (r(b), (i = !0)),
           i && (n(b), M({ type: "brush", mode: S ? "move" : "resize" }));
       }
+      /**
+       * Adjusts and validates a range based on input parameters and existing state.
+       *
+       * This function calculates new bounds `r` and `u` for a given dimension `e` using inputs `t`, `n`, and `e`.
+       * It considers global variables like `S`, `d`, `f`, `k`, and helper functions `On` and `Math.max/Math.min`.
+       * The function updates the range if necessary and returns true if changes are made, otherwise void.
+       *
+       * @param {Array} t - Input array used to calculate new bounds.
+       * @param {number} n - Parameter used in conjunction with `On` function to determine initial bounds.
+       * @param {number} e - Dimension index for which the range is being adjusted.
+       */
       function g(t, n, e) {
         var r,
           u,
@@ -6168,6 +7919,9 @@ d3 = (function () {
             : void 0
         );
       }
+      /**
+       * Ends the brushing process and cleans up event listeners.
+       */
       function p() {
         h(),
           b
@@ -6316,10 +8070,25 @@ d3 = (function () {
     ];
   (Ci.behavior = {}),
     (Ci.behavior.drag = function () {
+      /**
+       * Attaches event listeners for "mousedown.drag" and "touchstart.drag" events to the current object.
+       */
       function t() {
         this.on("mousedown.drag", n).on("touchstart.drag", n);
       }
+      /**
+       * Handles drag events on an element.
+       *
+       * This function manages the drag interaction, including starting, moving, and ending the drag.
+       * It uses event listeners to track mouse or touch movements and updates the position accordingly.
+       * If a drag starts without movement, it handles click events to prevent unintended interactions.
+       *
+       * @param e - The initial event object triggering the drag operation.
+       */
       function n() {
+        /**
+         * Retrieves touch or mouse event data based on the presence of a specific identifier.
+         */
         function t() {
           var t = o.parentNode;
           return null != f
@@ -6328,6 +8097,9 @@ d3 = (function () {
               })[0]
             : Ci.mouse(t);
         }
+        /**
+         * Handles drag event and updates position data.
+         */
         function n() {
           if (!o.parentNode) return u();
           var n = t(),
@@ -6338,6 +8110,13 @@ d3 = (function () {
             j(),
             c({ type: "drag", x: n[0] + a[0], y: n[1] + a[1], dx: e, dy: r });
         }
+        /**
+         * Triggers a drag end event and cleans up drag-related event listeners.
+         *
+         * This function dispatches a "dragend" event using `c`. If `h` is true, it calls `j()` and checks if the target of the event matches `l`.
+         * If they match, it attaches a one-time click listener to `g` with `i`. It then removes existing drag-related mouse or touch move and end
+         * event listeners from `g`, based on whether `f` is defined.
+         */
         function u() {
           c({ type: "dragend" }),
             h && (j(), Ci.event.target === l && g.on("click.drag", i, !0)),
@@ -6345,6 +8124,9 @@ d3 = (function () {
               .on(null != f ? "touchmove.drag-" + f : "mousemove.drag", null)
               .on(null != f ? "touchend.drag-" + f : "mouseup.drag", null);
         }
+        /**
+         * Calls function j and unbinds the 'click.drag' event on g.
+         */
         function i() {
           j(), g.on("click.drag", null);
         }
@@ -6374,6 +8156,9 @@ d3 = (function () {
       );
     }),
     (Ci.behavior.zoom = function () {
+      /**
+       * Binds various zoom-related event listeners to an object.
+       */
       function t() {
         this.on("mousedown.zoom", o)
           .on("mousemove.zoom", l)
@@ -6383,18 +8168,33 @@ d3 = (function () {
           .on("touchmove.zoom", h)
           .on("touchend.zoom", s);
       }
+      /**
+       * Calculates normalized coordinates based on input point and constants.
+       */
       function n(t) {
         return [(t[0] - b[0]) / x, (t[1] - b[1]) / x];
       }
+      /**
+       * Applies a linear transformation to the input vector.
+       */
       function e(t) {
         return [t[0] * x + b[0], t[1] * x + b[1]];
       }
+      /**
+       * Adjusts the value of `x` to be within the range defined by `_`.
+       */
       function r(t) {
         x = Math.max(_[0], Math.min(_[1], t));
       }
+      /**
+       * Updates vector b by subtracting vector n from vector t and adds the result to b.
+       */
       function u(t, n) {
         (n = e(n)), (b[0] += t[0] - n[0]), (b[1] += t[1] - n[1]);
       }
+      /**
+       * Updates domains of m and y based on range mappings and inversion.
+       */
       function i() {
         m &&
           m.domain(
@@ -6415,20 +8215,35 @@ d3 = (function () {
                 .map(v.invert),
             );
       }
+      /**
+       * Triggers an event with zoom details and prevents default action.
+       */
       function a(t) {
         i(),
           Ci.event.preventDefault(),
           t({ type: "zoom", scale: x, translate: b });
       }
+      /**
+       * Handles zoom events and updates mouse interactions.
+       */
       function o() {
+        /**
+         * Sets mouse state and updates elements.
+         */
         function t() {
           (l = 1), u(Ci.mouse(i), s), a(o);
         }
+        /**
+         * Handles mouse events and conditionally attaches click event listener.
+         */
         function e() {
           l && j(),
             f.on("mousemove.zoom", null).on("mouseup.zoom", null),
             l && Ci.event.target === c && f.on("click.zoom", r, !0);
         }
+        /**
+         * Triggers function j and removes the 'click.zoom' event listener from f.
+         */
         function r() {
           j(), f.on("click.zoom", null);
         }
@@ -6440,15 +8255,24 @@ d3 = (function () {
           s = n(Ci.mouse(i));
         Fi.focus(), j();
       }
+      /**
+       * Updates global variable `g` if not set, calculates and applies scaling factor, updates mouse position, and calls function `a`.
+       */
       function c() {
         g || (g = n(Ci.mouse(this))),
           r(Math.pow(2, 0.002 * Wa()) * x),
           u(Ci.mouse(this), g),
           a(w.of(this, arguments));
       }
+      /**
+       * Resets the variable `g` to null.
+       */
       function l() {
         g = null;
       }
+      /**
+       * Calculates and processes mouse event data.
+       */
       function f() {
         var t = Ci.mouse(this),
           e = n(t),
@@ -6459,6 +8283,9 @@ d3 = (function () {
           u(t, e),
           a(w.of(this, arguments));
       }
+      /**
+       * Handles touch events and performs actions based on the number of touches and timing.
+       */
       function s() {
         var t = Ci.touches(this),
           e = Date.now();
@@ -6479,6 +8306,9 @@ d3 = (function () {
           M = e;
         }
       }
+      /**
+       * Handles touch events to calculate and update positions and scale.
+       */
       function h() {
         var t = Ci.touches(this),
           n = t[0],
@@ -6553,6 +8383,14 @@ d3 = (function () {
       };
     }),
     (Ci.layout.chord = function () {
+      /**
+       * Generates a complex data structure based on input parameters and sorts it according to provided comparison functions.
+       *
+       * The function initializes various arrays and objects, iterates through nested loops to calculate values,
+       * applies sorting based on optional comparison functions, and finally constructs an array of connections between elements.
+       *
+       * @returns void
+       */
       function t() {
         var t,
           l,
@@ -6614,6 +8452,9 @@ d3 = (function () {
           }
         c && n();
       }
+      /**
+       * Sorts array `e` based on the average of source and target values.
+       */
       function n() {
         e.sort(function (t, n) {
           return c(
@@ -6659,6 +8500,16 @@ d3 = (function () {
       );
     }),
     (Ci.layout.force = function () {
+      /**
+       * Creates a function that calculates the repulsion force between two points and updates their positions.
+       *
+       * This inner function takes four parameters: `n`, `e`, `r`, and `u`. It checks if the point of `n` is not equal to `t`.
+       * If so, it calculates the distance between the two points and determines if the charge effect should be applied.
+       * The function updates the position of `t` based on the calculated force and returns a boolean indicating whether
+       * the repulsion was significant enough to modify `t`'s position.
+       *
+       * @param {Object} t - The target point object containing properties like `point`, `x`, `y`, `charge`, `px`, and `py`.
+       */
       function t(t) {
         return function (n, e, r, u) {
           if (n.point !== t) {
@@ -6677,6 +8528,9 @@ d3 = (function () {
           return !n.charge;
         };
       }
+      /**
+       * Updates event coordinates and resumes a process.
+       */
       function n(t) {
         (t.px = Ci.event.x), (t.py = Ci.event.y), c.resume();
       }
@@ -6785,11 +8639,17 @@ d3 = (function () {
             : r;
         }),
         (c.start = function () {
+          /**
+           * Retrieves a numeric value from an array or generates a random number if none is found.
+           */
           function t(t, r) {
             for (var u, i = n(e), a = -1, o = i.length; o > ++a; )
               if (!isNaN((u = i[a][t]))) return u;
             return Math.random() * r;
           }
+          /**
+           * Initializes or updates an adjacency list and returns the neighbors of a specified node.
+           */
           function n() {
             if (!a) {
               for (a = [], r = 0; s > r; ++r) a[r] = [];
@@ -6862,6 +8722,19 @@ d3 = (function () {
   var no = 20,
     eo = 1;
   (Ci.layout.partition = function () {
+    /**
+     * Recursively calculates and assigns layout properties to a node and its children.
+     *
+     * The function sets the x and y positions, as well as the dx and dy dimensions,
+     * of the given node based on its depth and value. It then processes each child node,
+     * recursively calling itself to set their properties, adjusting the starting position
+     * for subsequent siblings based on the previous sibling's value.
+     *
+     * @param {Object} n - The current node to process.
+     * @param {number} e - The x-coordinate of the node.
+     * @param {number} r - The width available for the node.
+     * @param {number} u - The height per level of depth in the tree.
+     */
     function t(n, e, r, u) {
       var i = n.children;
       if (
@@ -6879,6 +8752,9 @@ d3 = (function () {
           t((o = i[l]), e, (c = o.value * r), u), (e += c);
       }
     }
+    /**
+     * Recursively calculates the depth of a tree-like structure.
+     */
     function n(t) {
       var e = t.children,
         r = 0;
@@ -6886,6 +8762,9 @@ d3 = (function () {
         for (var u, i = -1; u > ++i; ) r = Math.max(r, n(e[i]));
       return 1 + r;
     }
+    /**
+     * Processes input and returns modified result.
+     */
     function e(e, i) {
       var a = r.call(this, e, i);
       return t(a[0], 0, u[0], u[1] / n(a[0])), a;
@@ -6900,6 +8779,13 @@ d3 = (function () {
     );
   }),
     (Ci.layout.pie = function () {
+      /**
+       * Transforms an array of data into a series of arcs with calculated angles.
+       *
+       * This function maps input data to numerical values, calculates start and end angles for each arc,
+       * and sorts the arcs based on provided comparison logic. The resulting array contains objects representing
+       * each arc's data, value, and angular range.
+       */
       function t(i) {
         var a = i.map(function (e, r) {
             return +n.call(t, e, r);
@@ -6955,6 +8841,9 @@ d3 = (function () {
     });
   var ro = {};
   Ci.layout.stack = function () {
+    /**
+     * Maps and processes elements of input arrays using various helper functions.
+     */
     function t(a, c) {
       var l = a.map(function (e, r) {
           return n.call(t, e, r);
@@ -7095,6 +8984,16 @@ d3 = (function () {
       zero: er,
     });
   (Ci.layout.histogram = function () {
+    /**
+     * Generates an array of objects representing intervals and their associated data points.
+     *
+     * This function maps input data to a transformed list, filters it based on given criteria,
+     * calculates interval boundaries, and assigns weights to each interval. It then iterates over the
+     * original data to populate these intervals with relevant data points that fall within their bounds.
+     *
+     * @param {Array} t - The input data array.
+     * @param {*} i - The filter criterion used in mapping and filtering operations.
+     */
     function t(t, i) {
       for (
         var a,
@@ -7148,6 +9047,16 @@ d3 = (function () {
     );
   }),
     (Ci.layout.hierarchy = function () {
+      /**
+       * Recursively processes nodes to build a hierarchical structure with depth and value calculations.
+       *
+       * This function traverses a tree-like structure, assigning depths to each node and calculating their values.
+       * It also manages the parent-child relationships between nodes.
+       *
+       * @param {Object} n - The current node being processed.
+       * @param {number} a - The current depth level of the node.
+       * @param {Array} o - An array used to accumulate processed nodes.
+       */
       function t(n, a, o) {
         var c = u.call(e, n, a);
         if (((n.depth = a), o.push(n), c && (l = c.length))) {
@@ -7161,6 +9070,16 @@ d3 = (function () {
         } else i && (n.value = +i.call(e, n, a) || 0);
         return n;
       }
+      /**
+       * Recursively calculates the sum of values from child nodes.
+       *
+       * This function traverses through the children of the given node `t` and recursively sums up their values.
+       * If a node has no children, it calls the function `i` to get its value. The result is accumulated in `a`.
+       * Finally, if `i` is defined, it updates the value of `t` with the calculated sum.
+       *
+       * @param {Object} t - The current node being processed.
+       * @param {number} r - The index or position of the current node.
+       */
       function n(t, r) {
         var u = t.children,
           a = 0;
@@ -7169,6 +9088,9 @@ d3 = (function () {
         else i && (a = +i.call(e, t, r) || 0);
         return i && (t.value = a), a;
       }
+      /**
+       * Initializes an array and populates it using a helper function `t`.
+       */
       function e(n) {
         var e = [];
         return t(n, 0, e), e;
@@ -7193,6 +9115,9 @@ d3 = (function () {
       );
     }),
     (Ci.layout.pack = function () {
+      /**
+       * Processes and modifies an object based on given parameters.
+       */
       function t(t, u) {
         var i = n.call(this, t, u),
           a = i[0];
@@ -7232,6 +9157,17 @@ d3 = (function () {
       );
     }),
     (Ci.layout.cluster = function () {
+      /**
+       * Adjusts node positions within a tree structure based on specified dimensions and alignment rules.
+       *
+       * This function processes each node in the provided tree, calculating its x and y coordinates
+       * based on its children or position relative to previous nodes. It then scales these coordinates
+       * according to given dimensions. The function leverages helper functions like `n`, `Lr`, `Sr`,
+       * `wr`, `kr`, `Er`, and `e` for various calculations and iterations.
+       *
+       * @param {any} t - The root node or tree structure to be processed.
+       * @param {any} u - Additional parameters required by the function `n`.
+       */
       function t(t, u) {
         var i,
           a = n.call(this, t, u),
@@ -7269,7 +9205,30 @@ d3 = (function () {
       );
     }),
     (Ci.layout.tree = function () {
+      /**
+       * Reorders and positions nodes in a tree structure based on given parameters.
+       *
+       * This function recursively processes each node, calculating preliminary positions,
+       * modifying them based on sibling relationships, and finally adjusting the coordinates
+       * to fit within specified bounds. It uses helper functions to traverse and manipulate
+       * the tree's structure.
+       *
+       * @param t - The root node of the tree.
+       * @param u - Additional parameters or options for processing the tree.
+       * @returns An array containing the processed nodes with updated positions.
+       */
       function t(t, u) {
+        /**
+         * Recursively calculates and assigns preliminary positions for nodes in a tree structure.
+         *
+         * This function traverses the children of a given node, recursively applying the same logic to each child,
+         * adjusting their preliminary positions based on sibling relationships and parent-child distances.
+         * After processing all children, it updates the current node's preliminary position and modulation.
+         * If there are no children, it sets the preliminary position based on the parent node.
+         *
+         * @param {Object} t - The current node in the tree structure.
+         * @param {Object} n - The previous sibling node, used to calculate relative positions.
+         */
         function i(t, n) {
           var r = t.children,
             u = t._tree;
@@ -7283,6 +9242,9 @@ d3 = (function () {
               : (u.prelim = g);
           } else n && (u.prelim = n._tree.prelim + e(t, n));
         }
+        /**
+         * Adjusts the x position of nodes and recursively processes their children.
+         */
         function a(t, n) {
           t.x = t._tree.prelim + n;
           var e = t.children;
@@ -7292,6 +9254,16 @@ d3 = (function () {
             for (n += t._tree.mod; r > ++u; ) a(e[u], n);
           }
         }
+        /**
+         * Adjusts the positions of nodes in a tree structure to ensure proper alignment and spacing.
+         * Iterates through sibling nodes, updating their preliminary positions based on their modifiers.
+         * Handles threading when necessary to maintain the hierarchical layout.
+         *
+         * @param {Object} t - The current node in the iteration.
+         * @param {Object} n - The next sibling node to process.
+         * @param {Object} r - A reference point for alignment adjustments.
+         * @returns {Object} - The adjusted reference point after processing all nodes.
+         */
         function o(t, n, r) {
           if (n) {
             for (
@@ -7366,11 +9338,29 @@ d3 = (function () {
       );
     }),
     (Ci.layout.treemap = function () {
+      /**
+       * Updates the area property of each element in an array based on a given multiplier.
+       *
+       * The function iterates over each element in the input array `t`. For each element,
+       * it calculates the product of the element's value and the multiplier `n`. If the
+       * result is NaN or non-positive, the area is set to 0; otherwise, the calculated
+       * value is assigned to the area property of the element.
+       *
+       * @param {Array} t - An array of objects with a 'value' property.
+       * @param {number} n - A multiplier used to calculate the area.
+       */
       function t(t, n) {
         for (var e, r, u = -1, i = t.length; i > ++u; )
           (r = (e = t[u]).value * (0 > n ? 0 : n)),
             (e.area = isNaN(r) || 0 >= r ? 0 : r);
       }
+      /**
+       * Recursively processes each child node of a given element to arrange them in a layout based on specified parameters.
+       *
+       * This function calculates the dimensions and arrangement of child elements within a parent element. It uses different tiling methods like slice, dice, slice-dice, or squarify to optimize the space utilization. The function iteratively processes each child, updating the layout until all children are arranged.
+       *
+       * @param e - The parent element containing child nodes to be processed.
+       */
       function n(e) {
         var i = e.children;
         if (i && i.length) {
@@ -7404,6 +9394,17 @@ d3 = (function () {
           f.length && (u(f, d, l, !0), (f.length = f.area = 0)), i.forEach(n);
         }
       }
+      /**
+       * Processes and recursively computes layout for a node's children.
+       *
+       * This function handles the hierarchical layout of child nodes within a given parent node `n`.
+       * It calculates dimensions, areas, and recursively applies the same logic to each child.
+       * The function uses auxiliary functions like `s`, `t`, and `u` to perform specific calculations
+       * related to positioning and area management. It ensures that each child's layout is computed
+       * based on its parent's value and dimensions.
+       *
+       * @param {Object} n - The parent node containing children to be processed.
+       */
       function e(n) {
         var r = n.children;
         if (r && r.length) {
@@ -7420,6 +9421,17 @@ d3 = (function () {
           r.forEach(e);
         }
       }
+      /**
+       * Calculates a ratio based on areas and a constant factor.
+       *
+       * This function iterates over an array of objects, each with an 'area' property,
+       * to find the maximum and minimum areas. It then computes a ratio involving these
+       * extreme areas, the square of the input parameters `t` and `n`, and a constant `p`.
+       * If `t.area` is zero, it returns Infinity.
+       *
+       * @param {Object[]} t - An array of objects, each with an 'area' property.
+       * @param {number} n - A numerical value used in the ratio calculation.
+       */
       function r(t, n) {
         for (
           var e, r = t.area, u = 0, i = 1 / 0, a = -1, o = t.length;
@@ -7433,6 +9445,18 @@ d3 = (function () {
           r ? Math.max((n * u * p) / r, r / (n * i * p)) : 1 / 0
         );
       }
+      /**
+       * Adjusts the dimensions and positions of elements in a given array based on constraints.
+       *
+       * This function iterates over an array of objects, adjusting their `x`, `y`, `dx`, and `dy` properties
+       * based on the provided constraints. It also updates the constraint object's `x`, `y`, `dx`, and `dy`
+       * values accordingly. The adjustment logic depends on whether the input parameter `n` matches `e.dx`.
+       *
+       * @param t - An array of objects with properties `area`, `x`, `y`, `dx`, and `dy`.
+       * @param n - A numeric value that influences the calculation of element dimensions.
+       * @param e - An object containing constraints for `x`, `y`, `dx`, and `dy` properties.
+       * @param r - A boolean flag that affects whether certain adjustments should be made.
+       */
       function u(t, n, e, r) {
         var u,
           i = -1,
@@ -7458,6 +9482,16 @@ d3 = (function () {
           (u.z = !1), (u.dy += e.y + e.dy - l), (e.x += f), (e.dx -= f);
         }
       }
+      /**
+       * Initializes and processes an object based on the provided reference.
+       *
+       * This function retrieves or creates an object using either the default value `a` or a custom creation method `o(r)`.
+       * It then sets initial properties for the object, updates its values if `a` is defined, and applies transformations.
+       * Finally, it returns the processed object.
+       *
+       * @param {Object} r - The reference object used to create or retrieve an object.
+       * @returns {Array} - An array containing the processed object.
+       */
       function i(r) {
         var u = a || o(r),
           i = u[0];
@@ -7487,12 +9521,18 @@ d3 = (function () {
           return arguments.length ? ((l = t), i) : l;
         }),
         (i.padding = function (t) {
+          /**
+           * Calls a function with the given node and depth, processes the result, and returns it.
+           */
           function n(n) {
             var e = t.call(i, n, n.depth);
             return null == e
               ? Pr(n)
               : Rr(n, "number" == typeof e ? [e, e, e, e] : e);
           }
+          /**
+           * Calls the Rr function with n and t as arguments.
+           */
           function e(n) {
             return Rr(n, t);
           }
@@ -7573,9 +9613,15 @@ d3 = (function () {
       },
     };
   (Ci.geo.albersUsa = function () {
+    /**
+     * Applies a higher-order function to its argument.
+     */
     function t(t) {
       return n(t)(t);
     }
+    /**
+     * Determines a value based on input array elements.
+     */
     function n(t) {
       var n = t[0],
         a = t[1];
@@ -7674,6 +9720,9 @@ d3 = (function () {
       },
     };
   Ci.geo.circle = function () {
+    /**
+     * Processes input to generate a polygon with transformed coordinates.
+     */
     function t() {
       var t = "function" == typeof r ? r.apply(this, arguments) : r,
         n = Pu(-t[0] * zi, -t[1] * zi, 0).invert,
@@ -7715,9 +9764,15 @@ d3 = (function () {
     return Fu(yo);
   }).raw = yo),
     (Ci.geo.graticule = function () {
+      /**
+       * Returns an object representing a MultiLineString with coordinates generated by n().
+       */
       function t() {
         return { type: "MultiLineString", coordinates: n() };
       }
+      /**
+       * Maps ranges and concatenates results.
+       */
       function n() {
         return Ci.range(Math.ceil(r / c) * c, e, c)
           .map(a)
@@ -7782,6 +9837,13 @@ d3 = (function () {
       return wu(t[0] * zi, t[1] * zi, n[0] * zi, n[1] * zi);
     }),
     (Ci.geo.greatArc = function () {
+      /**
+       * Generates a LineString from two geographical points using interpolation.
+       *
+       * This function calculates a series of intermediate points between two given
+       * geographical coordinates and returns them as a LineString. It uses the provided
+       * interpolation method to determine the path between the start and end points.
+       */
       function e() {
         for (
           var t = r || a.apply(this, arguments),
@@ -7847,6 +9909,9 @@ d3 = (function () {
     return Fu(Mo);
   }).raw = Mo),
     (Ci.geo.path = function () {
+      /**
+       * Processes a geographic object and returns the result.
+       */
       function t(t) {
         return (
           t &&
@@ -8172,6 +10237,20 @@ d3 = (function () {
     );
   }),
     (Ci.geom.quadtree = function (t, n, e, r, u) {
+      /**
+       * Updates a quadtree node with a new point and potentially splits the node if necessary.
+       *
+       * This function checks if the given point is valid (i.e., its coordinates are not NaN).
+       * If the current node is a leaf, it either updates the existing point or replaces it
+       * based on proximity. If the node is not a leaf, it directly processes the point.
+       *
+       * @param {object} t - The quadtree node to update.
+       * @param {object} n - The new point to add to the quadtree.
+       * @param {number} e - The width of the current quadtree node's bounds.
+       * @param {number} r - The height of the current quadtree node's bounds.
+       * @param {number} u - The x-coordinate of the current quadtree node's center.
+       * @param {number} i - The y-coordinate of the current quadtree node's center.
+       */
       function i(t, n, e, r, u, i) {
         if (!isNaN(n.x) && !isNaN(n.y))
           if (t.leaf) {
@@ -8183,6 +10262,9 @@ d3 = (function () {
               : (t.point = n);
           } else a(t, n, e, r, u, i);
       }
+      /**
+       * Updates a node's properties and recursively processes its children.
+       */
       function a(t, n, e, r, u, a) {
         var o = 0.5 * (e + u),
           c = 0.5 * (r + a),
@@ -8338,6 +10420,14 @@ d3 = (function () {
       "Dec",
     ];
   Ci.time.format = function (t) {
+    /**
+     * Processes a string by replacing specific characters and patterns.
+     *
+     * This function iterates over the input string `t` and processes it based on certain conditions.
+     * It uses arrays and objects (`Xo`, `Bo`) to map and transform characters. The function handles
+     * special cases where the character '37' is encountered, and it adjusts the index accordingly.
+     * Finally, it returns the processed string.
+     */
     function n(n) {
       for (var r, u, i, a = [], o = -1, c = 0; e > ++o; )
         37 === t.charCodeAt(o) &&
@@ -8460,6 +10550,9 @@ d3 = (function () {
     Jo = /^\s*\d+/,
     Go = Ci.map({ am: 0, pm: 1 });
   Ci.time.format.utc = function (t) {
+    /**
+     * Creates a new object, sets its property, and returns it.
+     */
     function n(t) {
       try {
         qo = Ju;
