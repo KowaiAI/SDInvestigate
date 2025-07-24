@@ -93,7 +93,7 @@ export default function Home({ params }: HomeProps) {
 
   // Update onboarding step mutation
   const updateOnboardingMutation = useMutation({
-    mutationFn: (step: string) => apiRequest(`/api/onboarding/${step}`, 'POST'),
+    mutationFn: (step: string) => apiRequest('POST', `/api/onboarding/${step}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/onboarding"] });
     },
