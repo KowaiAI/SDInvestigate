@@ -25,6 +25,15 @@ interface ExportModalProps {
   filters: any;
 }
 
+/**
+ * Modal component for exporting osint tools data.
+ *
+ * This component provides a dialog interface for users to export selected osint tools in various formats (JSON, CSV, Excel, PDF).
+ * It allows users to choose export options such as including tool descriptions, direct links, usage statistics, and category information.
+ * Upon successful export, it triggers a download of the file and shows a success toast notification. In case of failure, an error toast is displayed.
+ *
+ * @param {ExportModalProps} props - The properties for the ExportModal component.
+ */
 export default function ExportModal({
   toolCount,
   onClose,
@@ -76,6 +85,9 @@ export default function ExportModal({
     exportMutation.mutate();
   };
 
+  /**
+   * Updates the options state by setting a new value for a specified key.
+   */
   const handleOptionChange = (key: string, value: boolean) => {
     setOptions((prev) => ({
       ...prev,
