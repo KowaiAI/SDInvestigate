@@ -8,7 +8,10 @@ interface OnboardingTriggerProps {
   isVisible: boolean;
 }
 
-export function OnboardingTrigger({ onStartOnboarding, isVisible }: OnboardingTriggerProps) {
+export function OnboardingTrigger({
+  onStartOnboarding,
+  isVisible,
+}: OnboardingTriggerProps) {
   const [isDismissed, setIsDismissed] = useState(false);
 
   if (!isVisible || isDismissed) return null;
@@ -25,7 +28,9 @@ export function OnboardingTrigger({ onStartOnboarding, isVisible }: OnboardingTr
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center space-x-2">
               <HelpCircle className="w-5 h-5" />
-              <h3 className="font-semibold text-sm">New to S&D Intel Investigator?</h3>
+              <h3 className="font-semibold text-sm">
+                New to S&D Intel Investigator?
+              </h3>
             </div>
             <Button
               variant="ghost"
@@ -36,11 +41,12 @@ export function OnboardingTrigger({ onStartOnboarding, isVisible }: OnboardingTr
               <X className="w-4 h-4" />
             </Button>
           </div>
-          
+
           <p className="text-sm mb-3 opacity-90">
-            Take a quick tour to learn how to effectively use our OSINT investigation tools.
+            Take a quick tour to learn how to effectively use our OSINT
+            investigation tools.
           </p>
-          
+
           <div className="flex space-x-2">
             <Button
               variant="secondary"
@@ -66,7 +72,11 @@ export function OnboardingTrigger({ onStartOnboarding, isVisible }: OnboardingTr
 }
 
 // Floating help button that's always accessible
-export function HelpButton({ onStartOnboarding }: { onStartOnboarding: () => void }) {
+export function HelpButton({
+  onStartOnboarding,
+}: {
+  onStartOnboarding: () => void;
+}) {
   return (
     <Button
       onClick={onStartOnboarding}

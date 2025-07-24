@@ -16,6 +16,7 @@ A comprehensive web application for OSINT (Open Source Intelligence) investigati
 ## Technology Stack
 
 ### Frontend
+
 - React 18 with TypeScript
 - Wouter for routing
 - Tailwind CSS + shadcn/ui components
@@ -23,31 +24,37 @@ A comprehensive web application for OSINT (Open Source Intelligence) investigati
 - Vite for development and building
 
 ### Backend
+
 - Node.js with Express
 - TypeScript with ESM modules
 - Drizzle ORM with PostgreSQL
 - Session-based user management
 
 ### Database
+
 - PostgreSQL (Neon serverless)
 - Comprehensive schema for tools, categories, favorites, and onboarding
 
 ## Installation
 
 1. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 2. **Database Setup**
+
    - Set up a PostgreSQL database (recommend Neon for serverless)
    - Add `DATABASE_URL` to your environment variables
    - Run database migrations:
+
    ```bash
    npm run db:push
    ```
 
 3. **Seed the Database**
+
    ```bash
    npm run seed
    ```
@@ -86,18 +93,21 @@ NODE_ENV=development
 ## Key Features Explained
 
 ### Tool Management
+
 - Browse tools by investigation category
 - Advanced filtering by pricing model, platform, API availability
 - Search across tool names, descriptions, and features
 - Export filtered results for documentation
 
 ### User Experience
+
 - Interactive onboarding system with guided tours
 - Contextual help bubbles explaining features
 - Responsive design for desktop and mobile
 - Professional investigator-focused interface
 
 ### Data Integration
+
 - OSINT Framework JSON data parser
 - Support for bulk tool imports
 - Automated categorization and metadata extraction

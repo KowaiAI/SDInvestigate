@@ -33,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/tools", async (req, res) => {
     try {
       const filters: any = {};
-      
+
       if (req.query.categoryId) {
         filters.categoryId = parseInt(req.query.categoryId as string);
       }
@@ -44,7 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         filters.pricing = req.query.pricing as string;
       }
       if (req.query.hasApi !== undefined) {
-        filters.hasApi = req.query.hasApi === 'true';
+        filters.hasApi = req.query.hasApi === "true";
       }
 
       const tools = await storage.getTools(filters);
@@ -76,7 +76,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(tool);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid tool data", errors: error.errors });
+        return res
+          .status(400)
+          .json({ message: "Invalid tool data", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to create tool" });
     }
@@ -85,7 +87,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get user favorites
   app.get("/api/favorites", async (req, res) => {
     try {
-      const userId = req.session?.id || 'anonymous';
+      const userId = req.session?.id || "anonymous";
       const favorites = await storage.getFavorites(userId);
       res.json(favorites);
     } catch (error) {
@@ -97,13 +99,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/favorites", async (req, res) => {
     try {
       const { toolId } = req.body;
-      const userId = req.session?.id || 'anonymous';
-      
+      const userId = req.session?.id || "anonymous";
+
       if (!toolId) {
         return res.status(400).json({ message: "Tool ID is required" });
       }
 
-      const favorite = await storage.addFavorite({ toolId: parseInt(toolId), userId });
+      const favorite = await storage.addFavorite({
+        toolId: parseInt(toolId),
+        userId,
+      });
       res.status(201).json(favorite);
     } catch (error) {
       res.status(500).json({ message: "Failed to add favorite" });
@@ -114,8 +119,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/favorites/:toolId", async (req, res) => {
     try {
       const toolId = parseInt(req.params.toolId);
-      const userId = req.session?.id || 'anonymous';
-      
+      const userId = req.session?.id || "anonymous";
+
       await storage.removeFavorite(toolId, userId);
       res.status(204).send();
     } catch (error) {
@@ -127,29 +132,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/export", async (req, res) => {
     try {
       const { format, filters, options } = req.body;
-      
+
       // Get tools based on filters
       const tools = await storage.getTools(filters);
       const categories = await storage.getCategories();
-      
+
       // Create export data
       const exportData = {
         exportDate: new Date().toISOString(),
         toolCount: tools.length,
-        tools: tools.map(tool => {
-          const category = categories.find(c => c.id === tool.categoryId);
+        tools: tools.map((tool) => {
+          const category = categories.find((c) => c.id === tool.categoryId);
           return {
             ...tool,
-            categoryName: category?.name || 'Unknown',
+            categoryName: category?.name || "Unknown",
             ratingDisplay: (tool.rating / 10).toFixed(1),
-            userCountDisplay: tool.userCount >= 1000 ? `${(tool.userCount / 1000).toFixed(1)}k` : tool.userCount.toString()
+            userCountDisplay:
+              tool.userCount >= 1000
+                ? `${(tool.userCount / 1000).toFixed(1)}k`
+                : tool.userCount.toString(),
           };
         }),
-        categories
+        categories,
       };
 
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', `attachment; filename="osint-tools-export-${Date.now()}.json"`);
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="osint-tools-export-${Date.now()}.json"`,
+      );
       res.json(exportData);
     } catch (error) {
       res.status(500).json({ message: "Failed to export tools" });
@@ -159,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get user onboarding status
   app.get("/api/onboarding", async (req, res) => {
     try {
-      const userId = req.session?.id || 'anonymous';
+      const userId = req.session?.id || "anonymous";
       const onboarding = await storage.getUserOnboarding(userId);
       res.json(onboarding);
     } catch (error) {
@@ -170,9 +181,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update onboarding step
   app.post("/api/onboarding/:step", async (req, res) => {
     try {
-      const userId = req.session?.id || 'anonymous';
+      const userId = req.session?.id || "anonymous";
       const step = req.params.step;
-      
+
       const onboarding = await storage.updateOnboardingStep(userId, step);
       res.json(onboarding);
     } catch (error) {

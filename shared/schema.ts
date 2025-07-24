@@ -1,4 +1,11 @@
-import { pgTable, text, serial, integer, boolean, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  serial,
+  integer,
+  boolean,
+  jsonb,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -23,7 +30,10 @@ export const tools = pgTable("tools", {
   rating: integer("rating").notNull().default(40), // 1-5 scale * 10 for decimals
   userCount: integer("user_count").notNull().default(0),
   features: text("features").array().notNull().default([]),
-  useCases: jsonb("use_cases").$type<{title: string, description: string, color: string}[]>().notNull().default([]),
+  useCases: jsonb("use_cases")
+    .$type<{ title: string; description: string; color: string }[]>()
+    .notNull()
+    .default([]),
   tags: text("tags").array().notNull().default([]),
   isVerified: boolean("is_verified").notNull().default(true),
   lastUpdated: text("last_updated").notNull().default(""),
@@ -44,7 +54,9 @@ export const userOnboarding = pgTable("user_onboarding", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull().unique(),
   hasSeenWelcome: boolean("has_seen_welcome").notNull().default(false),
-  hasSeenCategoryFilter: boolean("has_seen_category_filter").notNull().default(false),
+  hasSeenCategoryFilter: boolean("has_seen_category_filter")
+    .notNull()
+    .default(false),
   hasSeenSearch: boolean("has_seen_search").notNull().default(false),
   hasSeenToolCard: boolean("has_seen_tool_card").notNull().default(false),
   hasSeenExport: boolean("has_seen_export").notNull().default(false),
@@ -64,7 +76,9 @@ export const insertFavoriteSchema = createInsertSchema(favorites).omit({
   id: true,
 });
 
-export const insertUserOnboardingSchema = createInsertSchema(userOnboarding).omit({
+export const insertUserOnboardingSchema = createInsertSchema(
+  userOnboarding,
+).omit({
   id: true,
 });
 

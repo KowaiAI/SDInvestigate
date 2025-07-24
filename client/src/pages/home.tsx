@@ -9,7 +9,13 @@ import ToolDetailModal from "@/components/tool-detail-modal";
 import { HelpBubble, useHelpBubble } from "@/components/help-bubble";
 import { OnboardingTrigger, HelpButton } from "@/components/onboarding-trigger";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { onboardingSteps } from "@/lib/onboarding-steps";
 import { apiRequest } from "@/lib/queryClient";
@@ -21,15 +27,15 @@ interface HomeProps {
 
 export default function Home({ params }: HomeProps) {
   const [location] = useLocation();
-  const categorySlug = params?.slug || 'social-media';
+  const categorySlug = params?.slug || "social-media";
   const queryClient = useQueryClient();
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({
     pricing: "",
     hasApi: false,
     isFree: false,
-    isPremium: false
+    isPremium: false,
   });
   const [sortBy, setSortBy] = useState("relevance");
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
@@ -61,23 +67,23 @@ export default function Home({ params }: HomeProps) {
   // Build filters for API call
   const buildFilters = () => {
     const filters: any = {};
-    
+
     if (currentCategory) {
       filters.categoryId = currentCategory.id;
     }
-    
+
     if (searchQuery.trim()) {
       filters.search = searchQuery.trim();
     }
-    
+
     if (selectedFilters.pricing) {
       filters.pricing = selectedFilters.pricing;
     }
-    
+
     if (selectedFilters.hasApi) {
       filters.hasApi = true;
     }
-    
+
     return filters;
   };
 
@@ -93,7 +99,7 @@ export default function Home({ params }: HomeProps) {
 
   // Update onboarding step mutation
   const updateOnboardingMutation = useMutation({
-    mutationFn: (step: string) => apiRequest('POST', `/api/onboarding/${step}`),
+    mutationFn: (step: string) => apiRequest("POST", `/api/onboarding/${step}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/onboarding"] });
     },
@@ -101,10 +107,14 @@ export default function Home({ params }: HomeProps) {
 
   // Check if user should see onboarding
   useEffect(() => {
-    if (onboardingData && !onboardingData.completedOnboarding && !isOnboarding) {
+    if (
+      onboardingData &&
+      !onboardingData.completedOnboarding &&
+      !isOnboarding
+    ) {
       // Auto-start onboarding for new users after a short delay
       const timer = setTimeout(() => {
-        startOnboarding('welcome');
+        startOnboarding("welcome");
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -119,17 +129,17 @@ export default function Home({ params }: HomeProps) {
   };
 
   const handleOnboardingComplete = () => {
-    updateOnboardingMutation.mutate('complete');
+    updateOnboardingMutation.mutate("complete");
     completeOnboarding();
   };
 
   const handleSkipOnboarding = () => {
-    updateOnboardingMutation.mutate('complete');
+    updateOnboardingMutation.mutate("complete");
     skipOnboarding();
   };
 
   const handleStartTour = () => {
-    startOnboarding('welcome');
+    startOnboarding("welcome");
   };
 
   // Sort and paginate tools
@@ -187,7 +197,7 @@ export default function Home({ params }: HomeProps) {
 
   // Calculate stats for header
   const totalToolsCount = categories.reduce((sum, cat) => {
-    const categoryTools = allTools.filter(tool => tool.categoryId === cat.id);
+    const categoryTools = allTools.filter((tool) => tool.categoryId === cat.id);
     return sum + categoryTools.length;
   }, 0);
 
@@ -214,15 +224,18 @@ export default function Home({ params }: HomeProps) {
         onComplete={handleOnboardingComplete}
         onSkip={handleSkipOnboarding}
       />
-      
+
       <OnboardingTrigger
         onStartOnboarding={handleStartTour}
         isVisible={!onboardingData?.completedOnboarding && !isOnboarding}
       />
-      
-      <HelpButton onStartOnboarding={handleStartTour} data-onboarding="help-button" />
+
+      <HelpButton
+        onStartOnboarding={handleStartTour}
+        data-onboarding="help-button"
+      />
       <Header toolCount={totalToolsCount} onExport={handleExport} />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           <Sidebar
@@ -233,7 +246,7 @@ export default function Home({ params }: HomeProps) {
             filters={selectedFilters}
             onFilterChange={handleFilterChange}
           />
-          
+
           <main className="flex-1">
             {/* Results Header */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
@@ -243,7 +256,8 @@ export default function Home({ params }: HomeProps) {
                     {currentCategory?.name || "OSINT Tools"}
                   </h2>
                   <p className="text-sm text-slate-600 mt-1">
-                    {currentCategory?.description || "Open Source Intelligence Investigation Tools"}
+                    {currentCategory?.description ||
+                      "Open Source Intelligence Investigation Tools"}
                   </p>
                 </div>
                 <div className="mt-4 sm:mt-0 flex items-center space-x-4">
@@ -252,7 +266,9 @@ export default function Home({ params }: HomeProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="relevance">Sort by Relevance</SelectItem>
+                      <SelectItem value="relevance">
+                        Sort by Relevance
+                      </SelectItem>
                       <SelectItem value="name">Sort by Name</SelectItem>
                       <SelectItem value="rating">Sort by Rating</SelectItem>
                       <SelectItem value="recent">Sort by Recent</SelectItem>
@@ -282,12 +298,13 @@ export default function Home({ params }: HomeProps) {
                 <div className="text-slate-400 mb-4">
                   <i className="fas fa-search text-4xl"></i>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">No tools found</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                  No tools found
+                </h3>
                 <p className="text-slate-600">
-                  {searchQuery 
+                  {searchQuery
                     ? `No tools match your search for "${searchQuery}"`
-                    : "No tools available in this category"
-                  }
+                    : "No tools available in this category"}
                 </p>
               </div>
             )}
@@ -297,7 +314,9 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mt-6">
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-slate-600">
-                    Showing {startIndex + 1} to {Math.min(endIndex, sortedTools.length)} of {sortedTools.length} results
+                    Showing {startIndex + 1} to{" "}
+                    {Math.min(endIndex, sortedTools.length)} of{" "}
+                    {sortedTools.length} results
                   </div>
                   <div className="flex space-x-2">
                     <Button

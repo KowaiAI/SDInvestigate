@@ -25,7 +25,7 @@ export default function Sidebar({
   searchQuery,
   onSearchChange,
   filters,
-  onFilterChange
+  onFilterChange,
 }: SidebarProps) {
   const [location, setLocation] = useLocation();
 
@@ -36,19 +36,22 @@ export default function Sidebar({
   const handleFilterChange = (key: string, value: boolean | string) => {
     onFilterChange({
       ...filters,
-      [key]: value
+      [key]: value,
     });
   };
 
   const getCategoryPath = (slug: string) => {
-    return slug === 'social-media' ? '/' : `/category/${slug}`;
+    return slug === "social-media" ? "/" : `/category/${slug}`;
   };
 
   return (
     <aside className="lg:w-80 flex-shrink-0">
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Search Section */}
-        <div className="p-6 border-b border-slate-200" data-onboarding="search-bar">
+        <div
+          className="p-6 border-b border-slate-200"
+          data-onboarding="search-bar"
+        >
           <div className="relative">
             <Input
               type="text"
@@ -63,7 +66,9 @@ export default function Sidebar({
 
         {/* Categories */}
         <div className="p-6" data-onboarding="category-list">
-          <h3 className="text-sm font-semibold text-slate-900 mb-4">Categories</h3>
+          <h3 className="text-sm font-semibold text-slate-900 mb-4">
+            Categories
+          </h3>
           <nav className="space-y-1">
             {categories.map((category) => {
               const isActive = category.slug === currentCategorySlug;
@@ -73,17 +78,19 @@ export default function Sidebar({
                   href={getCategoryPath(category.slug)}
                   className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      ? "bg-primary/10 text-primary"
+                      : "text-slate-700 hover:bg-slate-100"
                   }`}
                 >
                   <i className={`${category.icon} w-5 mr-3`}></i>
                   <span className="flex-1">{category.name}</span>
-                  <span className={`text-xs px-2 py-1 rounded ${
-                    isActive
-                      ? 'bg-primary/20 text-primary'
-                      : 'bg-slate-200 text-slate-600'
-                  }`}>
+                  <span
+                    className={`text-xs px-2 py-1 rounded ${
+                      isActive
+                        ? "bg-primary/20 text-primary"
+                        : "bg-slate-200 text-slate-600"
+                    }`}
+                  >
                     187
                   </span>
                 </Link>

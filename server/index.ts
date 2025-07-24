@@ -8,12 +8,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Add session middleware for favorites functionality
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'osint-investigator-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "osint-investigator-secret-key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // 24 hours
+  }),
+);
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -69,11 +71,14 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+  server.listen(
+    {
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    },
+    () => {
+      log(`serving on port ${port}`);
+    },
+  );
 })();

@@ -30,23 +30,23 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     let url = queryKey[0] as string;
-    
+
     // Handle filters as URL parameters
     if (queryKey.length > 1 && queryKey[1]) {
       const filters = queryKey[1] as Record<string, any>;
       const params = new URLSearchParams();
-      
+
       Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') {
+        if (value !== undefined && value !== null && value !== "") {
           params.append(key, String(value));
         }
       });
-      
+
       if (params.toString()) {
-        url += '?' + params.toString();
+        url += "?" + params.toString();
       }
     }
-    
+
     const res = await fetch(url, {
       credentials: "include",
     });

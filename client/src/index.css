@@ -64,7 +64,7 @@
 
   body {
     @apply bg-slate-50 font-sans antialiased text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
   }
 }
 
@@ -72,50 +72,50 @@
   .category-icon {
     @apply w-5 h-5 flex-shrink-0;
   }
-  
+
   .tool-card {
     @apply bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow duration-200;
   }
-  
+
   .pricing-badge {
     @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
   }
-  
+
   .pricing-free {
     @apply bg-green-100 text-green-800;
   }
-  
+
   .pricing-freemium {
     @apply bg-orange-100 text-orange-800;
   }
-  
+
   .pricing-premium {
     @apply bg-purple-100 text-purple-800;
   }
-  
+
   .feature-badge {
     @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
   }
-  
+
   .feature-official {
     @apply bg-blue-100 text-blue-800;
   }
-  
+
   .feature-api {
     @apply bg-green-100 text-green-800;
   }
-  
+
   .feature-cli {
     @apply bg-purple-100 text-purple-800;
   }
-  
+
   .feature-python {
     @apply bg-gray-100 text-gray-800;
   }
-  
+
   .feature-online {
     @apply bg-blue-100 text-blue-800;
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");

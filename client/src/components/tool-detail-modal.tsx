@@ -2,7 +2,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Share, ExternalLink, Star, Users, Check, X } from "lucide-react";
+import {
+  Heart,
+  Share,
+  ExternalLink,
+  Star,
+  Users,
+  Check,
+  X,
+} from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Tool, Category } from "@shared/schema";
@@ -13,7 +21,11 @@ interface ToolDetailModalProps {
   onClose: () => void;
 }
 
-export default function ToolDetailModal({ tool, category, onClose }: ToolDetailModalProps) {
+export default function ToolDetailModal({
+  tool,
+  category,
+  onClose,
+}: ToolDetailModalProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -73,7 +85,7 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
   };
 
   const handleOpenTool = () => {
-    window.open(tool.url, '_blank', 'noopener,noreferrer');
+    window.open(tool.url, "_blank", "noopener,noreferrer");
   };
 
   const formatRating = (rating: number) => {
@@ -89,59 +101,59 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
 
   const getPricingColor = (pricing: string) => {
     switch (pricing) {
-      case 'free':
-        return 'bg-green-100 text-green-800';
-      case 'freemium':
-        return 'bg-orange-100 text-orange-800';
-      case 'premium':
-        return 'bg-purple-100 text-purple-800';
+      case "free":
+        return "bg-green-100 text-green-800";
+      case "freemium":
+        return "bg-orange-100 text-orange-800";
+      case "premium":
+        return "bg-purple-100 text-purple-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getUseCaseColor = (color?: string) => {
     switch (color) {
-      case 'blue':
-        return 'bg-blue-50 border border-blue-200';
-      case 'green':
-        return 'bg-green-50 border border-green-200';
-      case 'purple':
-        return 'bg-purple-50 border border-purple-200';
-      case 'orange':
-        return 'bg-orange-50 border border-orange-200';
+      case "blue":
+        return "bg-blue-50 border border-blue-200";
+      case "green":
+        return "bg-green-50 border border-green-200";
+      case "purple":
+        return "bg-purple-50 border border-purple-200";
+      case "orange":
+        return "bg-orange-50 border border-orange-200";
       default:
-        return 'bg-slate-50 border border-slate-200';
+        return "bg-slate-50 border border-slate-200";
     }
   };
 
   const getUseCaseTextColor = (color?: string) => {
     switch (color) {
-      case 'blue':
-        return 'text-blue-900';
-      case 'green':
-        return 'text-green-900';
-      case 'purple':
-        return 'text-purple-900';
-      case 'orange':
-        return 'text-orange-900';
+      case "blue":
+        return "text-blue-900";
+      case "green":
+        return "text-green-900";
+      case "purple":
+        return "text-purple-900";
+      case "orange":
+        return "text-orange-900";
       default:
-        return 'text-slate-900';
+        return "text-slate-900";
     }
   };
 
   const getUseCaseDescColor = (color?: string) => {
     switch (color) {
-      case 'blue':
-        return 'text-blue-700';
-      case 'green':
-        return 'text-green-700';
-      case 'purple':
-        return 'text-purple-700';
-      case 'orange':
-        return 'text-orange-700';
+      case "blue":
+        return "text-blue-700";
+      case "green":
+        return "text-green-700";
+      case "purple":
+        return "text-purple-700";
+      case "orange":
+        return "text-orange-700";
       default:
-        return 'text-slate-700';
+        return "text-slate-700";
     }
   };
 
@@ -151,33 +163,44 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
         <div className="p-6">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center space-x-4">
-              <div className={`w-12 h-12 bg-${tool.iconColor}-100 rounded-xl flex items-center justify-center`}>
-                <i className={`${tool.iconType} ${tool.iconName} text-${tool.iconColor}-600 text-xl`}></i>
+              <div
+                className={`w-12 h-12 bg-${tool.iconColor}-100 rounded-xl flex items-center justify-center`}
+              >
+                <i
+                  className={`${tool.iconType} ${tool.iconName} text-${tool.iconColor}-600 text-xl`}
+                ></i>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900">{tool.name}</h2>
-                <p className="text-slate-600">{category?.name || 'OSINT Tool'}</p>
+                <h2 className="text-xl font-bold text-slate-900">
+                  {tool.name}
+                </h2>
+                <p className="text-slate-600">
+                  {category?.name || "OSINT Tool"}
+                </p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="w-5 h-5" />
             </Button>
           </div>
-          
+
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Description</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                Description
+              </h3>
               <p className="text-slate-700 leading-relaxed">
                 {tool.fullDescription || tool.description}
               </p>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-slate-50 rounded-lg p-4">
                 <div className="text-sm text-slate-600 mb-1">Pricing</div>
                 <div className="text-lg font-semibold text-slate-900">
                   <Badge className={getPricingColor(tool.pricing)}>
-                    {tool.pricing.charAt(0).toUpperCase() + tool.pricing.slice(1)}
+                    {tool.pricing.charAt(0).toUpperCase() +
+                      tool.pricing.slice(1)}
                   </Badge>
                 </div>
               </div>
@@ -201,13 +224,18 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
                 </div>
               </div>
             </div>
-            
+
             {tool.features && tool.features.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">Key Features</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                  Key Features
+                </h3>
                 <ul className="space-y-2">
                   {tool.features.map((feature, index) => (
-                    <li key={index} className="flex items-center text-slate-700">
+                    <li
+                      key={index}
+                      className="flex items-center text-slate-700"
+                    >
                       <Check className="w-4 h-4 text-accent mr-3 flex-shrink-0" />
                       {feature}
                     </li>
@@ -215,20 +243,26 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
                 </ul>
               </div>
             )}
-            
+
             {tool.useCases && tool.useCases.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">Investigation Use Cases</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                  Investigation Use Cases
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {tool.useCases.map((useCase, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className={`rounded-lg p-3 ${getUseCaseColor(useCase.color)}`}
                     >
-                      <div className={`font-medium ${getUseCaseTextColor(useCase.color)}`}>
+                      <div
+                        className={`font-medium ${getUseCaseTextColor(useCase.color)}`}
+                      >
                         {useCase.title}
                       </div>
-                      <div className={`text-sm mt-1 ${getUseCaseDescColor(useCase.color)}`}>
+                      <div
+                        className={`text-sm mt-1 ${getUseCaseDescColor(useCase.color)}`}
+                      >
                         {useCase.description}
                       </div>
                     </div>
@@ -239,7 +273,9 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
 
             {tool.tags && tool.tags.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">Tags</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-3">
+                  Tags
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {tool.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary" className="text-xs">
@@ -251,18 +287,25 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
             )}
           </div>
         </div>
-        
+
         <div className="bg-slate-50 px-6 py-4 rounded-b-xl flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
               size="sm"
               onClick={handleFavoriteClick}
-              disabled={addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
+              disabled={
+                addFavoriteMutation.isPending ||
+                removeFavoriteMutation.isPending
+              }
               className="flex items-center space-x-2"
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current text-red-500' : 'text-slate-600'}`} />
-              <span>{isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}</span>
+              <Heart
+                className={`w-4 h-4 ${isFavorite ? "fill-current text-red-500" : "text-slate-600"}`}
+              />
+              <span>
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+              </span>
             </Button>
             <Button
               variant="ghost"
@@ -278,7 +321,10 @@ export default function ToolDetailModal({ tool, category, onClose }: ToolDetailM
             <Button variant="outline" onClick={onClose}>
               Close
             </Button>
-            <Button onClick={handleOpenTool} className="bg-primary hover:bg-primary/90">
+            <Button
+              onClick={handleOpenTool}
+              className="bg-primary hover:bg-primary/90"
+            >
               <ExternalLink className="w-4 h-4 mr-2" />
               Open Tool
             </Button>
